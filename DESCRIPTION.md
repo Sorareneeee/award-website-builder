@@ -1,0 +1,1 @@
+A Claude Code Skill distilling Awwwards-tier web design from DICH Fashion + Hermes Desktop. 5 zero-dep JS modules, 12 HTML templates, 9 palettes, 6 font sets, 30+ SVGs, 48-point self-audit. Build magazine-grade brand sites in 75 min.
