@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>award-website-builder — Demos</title>
-<meta name="description" content="Live demos for the award-website-builder Claude Code Skill. View 6 hero patterns and 6 section patterns in action.">
+<meta name="description" content="Live demos for the award-website-builder Claude Code Skill.">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:clamp(14px,1vw+10px,18px);color:#111;background:#fafafa;line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -25,38 +25,42 @@ footer a{color:#0000f2}
 </style>
 </head>
 <body>
-
 <header>
 <h1><span>award-website-builder</span> ← Demos</h1>
-<p>Live previews of the 12 HTML patterns included in the Awwwards-tier web design Skill.<br>Built from <code>tokens.css + base.css + effects.css</code> + 5 zero-dep JS modules.</p>
+<p>Live previews of the Awwwards-tier web design patterns.<br>All demos built from <code>tokens.css + base.css + effects.css</code> + 5 zero-dep JS modules.</p>
 </header>
-
 <div class="grid">
 <a class="card" href=".claude/skills/award-website-builder/assets/html/hero-patterns.html">
 <h2>6 Hero Patterns <span class="badge">live</span></h2>
 <p>Editorial Display, Pastel Magazine, Video Frame, 3D Cosmic, Type-Only Marquee, Split-Screen Reveal.</p>
 <span class="tag">Hermes · DICH · Aurora · Ink</span>
 </a>
-
 <a class="card" href=".claude/skills/award-website-builder/assets/html/section-patterns.html">
 <h2>6 Section Patterns <span class="badge">live</span></h2>
 <p>Wide Photo + Caption, Three-Column Feature Grid, Big Number Wall, Char-Reveal Manifesto, Carousel, Closing Wordmark.</p>
 <span class="tag">Warm · Blue · Ink · Cinema · Glacier · Clay</span>
 </a>
+<a class="card" href="docs/analysis/MASTER-ANALYSIS.md">
+<h2>10万字+ Analysis <span class="badge" style="background:#5c2c45">中文</span></h2>
+<p>DICH Fashion + Hermes Desktop — full deep dive with line-numbered references.</p>
+<span class="tag">6 chapters · 2,911 lines · 110KB</span>
+</a>
+<a class="card" href=".claude/skills/award-website-builder/assets/prompts/image-prompts.md">
+<h2>5 Visual Moods <span class="badge" style="background:#5c2c45">prompts</span></h2>
+<p>A (retro-futurist) / B (brutalist) / C (cinematic) / D (mint pop) / E (aurora cosmic). Complete Midjourney/SD prompt library.</p>
+<span class="tag">image-prompts.md · 8-asset minimum set</span>
+</a>
 </div>
-
 <h2 style="margin-top:3rem;font-size:1.1rem;">Quick-start in 4 lines</h2>
 <pre style="background:#eee;padding:1rem;border-radius:8px;overflow-x:auto;font-size:.85rem;"><code>&lt;link rel="stylesheet" href=".claude/skills/award-website-builder/assets/css/tokens.css"&gt;
 &lt;link rel="stylesheet" href=".claude/skills/award-website-builder/assets/css/base.css"&gt;
 &lt;link rel="stylesheet" href=".claude/skills/award-website-builder/assets/css/effects.css"&gt;
-
 &lt;script type="module"&gt;
-  import { initAllNoise, initSmoothScroll, initParallax, initReveal, splitText } from "./.claude/skills/award-website-builder/assets/js/index.js";
+  import { initAllNoise, initSmoothScroll, initParallax, initReveal, splitText } from ".claude/skills/award-website-builder/assets/js/index.js";
   initAllNoise(); initSmoothScroll(); initParallax(); initReveal(); splitText();
 &lt;/script&gt;</code></pre>
-
 <footer>
-<p>MIT License · <a href="https://github.com/Sorareneeee/award-website-builder">GitHub</a> · <a href="https://github.com/Sorareneeee/award-website-builder/.claude/skills/award-website-builder/SKILL.md">SKILL.md</a></p>
+<p>MIT License · <a href="https://github.com/Sorareneeee/award-website-builder">GitHub</a> · <a href=".claude/skills/award-website-builder/SKILL.md">SKILL.md</a></p>
 </footer>
 </body>
 </html>
