@@ -1,0 +1,418 @@
+<!--
+  ===============================================================
+  section-patterns.html — 6 reusable section block patterns
+  ---------------------------------------------------------------
+  Each <section data-pattern="N"> is a self-contained, copy-paste-
+  ready mid-page section. Pairs with hero-patterns.html.
+
+  Patterns:
+    1.  Wide Photo + Caption       (DICH editorial ref)
+    2.  Three-Column Feature Grid   (Hermes feature cards ref)
+    3.  Big Number Wall            (DICH stats ref)
+    4.  Char-Reveal Manifesto      (DICH brand statement ref)
+    5.  Carousel / Swipe Row       (DICH collections ref)
+    6.  Closing Wordmark + Footer  (Hermes closing ref)
+
+  Pattern 6 is the canonical "Hermes closer" — most projects end here.
+  ===============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Section Patterns — Award-Winning Site Library</title>
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/effects.css">
+<style>
+  body { padding-block: 5rem; }
+  .pattern {
+    border-block: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    padding-block: 4rem;
+  }
+  .pattern__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-mono-tight);
+    opacity: 0.6;
+    margin-bottom: 2rem;
+  }
+  .container { container-type: inline-size; }
+</style>
+</head>
+<body>
+
+<!-- ===========================================================
+     PATTERN 1: Wide Photo + Caption
+     Reference: DICH's "Our Mission" / "Collections" sections
+     =========================================================== -->
+<section class="pattern" data-pattern="1">
+  <p class="pattern__label">Pattern 1 — Wide Photo + Caption (DICH reference)</p>
+
+  <div class="theme-warm" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) var(--gutter);">
+
+    <div class="container" style="display: grid; grid-template-columns: 1fr 1fr;
+         gap: var(--space-7); align-items: end;">
+
+      <h2 data-reveal class="display" style="grid-column: 1 / -1;
+         font-size: clamp(3rem, 8vw, 7rem);
+         line-height: 0.88; font-weight: 400; text-transform: uppercase;
+         letter-spacing: 0.01em; max-width: 14ch;">
+        Our Mission
+      </h2>
+
+      <figure data-reveal class="parallax" style="grid-column: 1 / span 1;
+         margin: 0;">
+        <img src="https://placehold.co/1200x900/5c2c45/ffdfc4?text=Image"
+             alt="A model in ceremonial dress"
+             style="width:100%; height: 60vh; object-fit: cover;
+                    filter: grayscale(0.2) contrast(1.05);">
+        <figcaption class="body-mono" style="opacity: 0.6; margin-top: 1rem;
+                          font-size: 0.875rem;">
+          Fig. 01 — Future, reimagined.
+        </figcaption>
+      </figure>
+
+      <div data-reveal style="grid-column: 2 / span 1;">
+        <p class="eyebrow">Brand Statement</p>
+        <p style="font-family: var(--font-serif); font-size: 1.25rem;
+                  line-height: 1.5; margin-top: 1.5rem; max-width: 38ch;">
+          DICH stands at the intersection of creativity and bold solutions.
+          We are born to fight for fashion that not only beautifies but also
+          ignites new advancements — a practice, not a product.
+        </p>
+        <a href="#story" class="body-mono" style="display:inline-block;
+           margin-top: 2rem; padding-bottom: 4px; border-bottom: 1px solid currentColor;">
+          Read the full story →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 2: Three-Column Feature Grid
+     Reference: Hermes lines 257-264 — feature cards with #N numbering
+     =========================================================== -->
+<section class="pattern" data-pattern="2">
+  <p class="pattern__label">Pattern 2 — Three-Column Feature Grid (Hermes reference)</p>
+
+  <div class="theme-blue" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) var(--gutter);">
+
+    <header style="display: flex; justify-content: space-between;
+                   align-items: baseline; margin-bottom: var(--space-7);">
+      <p class="eyebrow">Capabilities · 2026</p>
+      <p class="eyebrow">Six features</p>
+    </header>
+
+    <div class="container" style="display: grid; grid-template-columns: repeat(3, 1fr);
+         gap: var(--space-7) var(--space-5);">
+
+      <!-- Feature 1 -->
+      <article data-reveal>
+        <p class="body-mono" style="opacity: 0.6;">#1 Connect</p>
+        <h3 class="display" style="font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+           font-weight: 300; line-height: 1; margin-block: 1rem;
+           text-transform: uppercase; letter-spacing: 0.02em;">
+          Lives Everywhere
+        </h3>
+        <div class="parallax" style="aspect-ratio: 666/574; overflow: hidden;
+                    background: var(--color-ink); margin-block: 1.5rem;">
+          <img src="https://placehold.co/666x574/170d02/edff45?text=Feature+1"
+               alt="" aria-hidden="true"
+               style="width:100%; height:100%; object-fit: cover;
+                      mix-blend-mode: screen;">
+        </div>
+        <p class="body-mono" style="opacity: 0.85;">
+          Telegram, Discord, Slack, WhatsApp — and a growing list of platforms.
+          One agent, one memory, every surface.
+        </p>
+      </article>
+
+      <!-- Feature 2 -->
+      <article data-reveal>
+        <p class="body-mono" style="opacity: 0.6;">#2 Remember</p>
+        <h3 class="display" style="font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+           font-weight: 300; line-height: 1; margin-block: 1rem;
+           text-transform: uppercase; letter-spacing: 0.02em;">
+          Persistent Memory
+        </h3>
+        <div class="parallax" style="aspect-ratio: 666/574; overflow: hidden;
+                    background: var(--color-ink); margin-block: 1.5rem;">
+          <img src="https://placehold.co/666x574/170d02/edff45?text=Feature+2"
+               alt="" aria-hidden="true"
+               style="width:100%; height:100%; object-fit: cover;
+                      mix-blend-mode: screen;">
+        </div>
+        <p class="body-mono" style="opacity: 0.85;">
+          It learns your projects, auto-generates skills, and never forgets
+          how it solved a problem.
+        </p>
+      </article>
+
+      <!-- Feature 3 -->
+      <article data-reveal>
+        <p class="body-mono" style="opacity: 0.6;">#3 Schedule</p>
+        <h3 class="display" style="font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+           font-weight: 300; line-height: 1; margin-block: 1rem;
+           text-transform: uppercase; letter-spacing: 0.02em;">
+          Focused Automation
+        </h3>
+        <div class="parallax" style="aspect-ratio: 666/574; overflow: hidden;
+                    background: var(--color-ink); margin-block: 1.5rem;">
+          <img src="https://placehold.co/666x574/170d02/edff45?text=Feature+3"
+               alt="" aria-hidden="true"
+               style="width:100%; height:100%; object-fit: cover;
+                      mix-blend-mode: screen;">
+        </div>
+        <p class="body-mono" style="opacity: 0.85;">
+          Natural-language scheduling for reports, backups, and briefings —
+          running unattended, focused every time.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 3: Big Number Wall
+     Reference: DICH's stats section
+     =========================================================== -->
+<section class="pattern" data-pattern="3">
+  <p class="pattern__label">Pattern 3 — Big Number Wall (DICH reference)</p>
+
+  <div class="theme-ink" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) var(--gutter);">
+
+    <p class="eyebrow" data-reveal style="text-align: center;
+       margin-bottom: var(--space-7);">By the numbers</p>
+
+    <div class="container" style="display: grid; grid-template-columns: repeat(4, 1fr);
+         gap: var(--space-5); border-block: 1px solid color-mix(in srgb, currentColor 15%, transparent);">
+      <div data-reveal class="tabular" style="padding: var(--space-7) 0;
+           border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);">
+        <p class="display" style="font-size: clamp(3rem, 8vw, 7rem);
+           font-weight: 300; line-height: 0.9; font-variant-numeric: tabular-nums;">
+          12<span style="font-size: 0.5em; vertical-align: top;">k+</span>
+        </p>
+        <p class="body-mono" style="opacity: 0.6; margin-top: 0.5rem;">
+          Pieces Created
+        </p>
+      </div>
+      <div data-reveal class="tabular" style="padding: var(--space-7) 0;
+           border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);">
+        <p class="display" style="font-size: clamp(3rem, 8vw, 7rem);
+           font-weight: 300; line-height: 0.9;">
+          47
+        </p>
+        <p class="body-mono" style="opacity: 0.6; margin-top: 0.5rem;">
+          Countries Shipped
+        </p>
+      </div>
+      <div data-reveal class="tabular" style="padding: var(--space-7) 0;
+           border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);">
+        <p class="display" style="font-size: clamp(3rem, 8vw, 7rem);
+           font-weight: 300; line-height: 0.9;">
+          98<span style="font-size: 0.5em; vertical-align: top;">%</span>
+        </p>
+        <p class="body-mono" style="opacity: 0.6; margin-top: 0.5rem;">
+          Customer Rating
+        </p>
+      </div>
+      <div data-reveal class="tabular" style="padding: var(--space-7) 0;">
+        <p class="display" style="font-size: clamp(3rem, 8vw, 7rem);
+           font-weight: 300; line-height: 0.9;">
+          6
+        </p>
+        <p class="body-mono" style="opacity: 0.6; margin-top: 0.5rem;">
+          Years Designing
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 4: Char-Reveal Manifesto
+     Reference: DICH's brand statement / Hermes' footer
+     =========================================================== -->
+<section class="pattern" data-pattern="4">
+  <p class="pattern__label">Pattern 4 — Char-Reveal Manifesto</p>
+
+  <div class="theme-cinema" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) var(--gutter); text-align: center;">
+
+    <p class="eyebrow" data-reveal style="margin-bottom: var(--space-7);">
+      A Brand Statement
+    </p>
+
+    <h2 data-split="chars" data-reveal
+        class="display" style="font-size: clamp(2.5rem, 6vw, 5.5rem);
+        line-height: 1.15; font-weight: 300; text-transform: none;
+        letter-spacing: -0.01em; max-width: 22ch; margin-inline: auto;
+        font-family: var(--font-serif);">
+      We make tools that get out of the way, so you can make the work that matters.
+    </h2>
+
+    <p class="body-mono" data-reveal style="margin-top: var(--space-7); opacity: 0.7;">
+      — The Team, 2026
+    </p>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 5: Carousel / Swipe Row
+     Reference: DICH's "collections" card row
+     =========================================================== -->
+<section class="pattern" data-pattern="5">
+  <p class="pattern__label">Pattern 5 — Carousel / Swipe Row (DICH reference)</p>
+
+  <div class="theme-glacier" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) 0; overflow: hidden;">
+
+    <header style="display: flex; justify-content: space-between;
+                   align-items: baseline; padding-inline: var(--gutter);
+                   margin-bottom: var(--space-6);">
+      <p class="eyebrow">Collections · AW26</p>
+      <a class="body-mono" href="#all">View all →</a>
+    </header>
+
+    <div class="marquee" style="--space-6: 2rem; padding-inline: var(--gutter);">
+      <div class="marquee__track" style="animation-duration: 50s;">
+
+        <article style="flex: 0 0 360px; aspect-ratio: 3/4; position: relative;
+                  background: var(--color-ink); overflow: hidden;">
+          <img src="https://placehold.co/360x480/0a1a2f/66d9ff?text=01"
+               alt="" aria-hidden="true"
+               style="position:absolute; inset:0; width:100%; height:100%;
+                      object-fit: cover; mix-blend-mode: lighten; opacity: 0.7;">
+          <div style="position: absolute; inset: auto 1rem 1rem 1rem;
+                      display: flex; justify-content: space-between; align-items: end;">
+            <p class="body-mono">01 — Veil</p>
+            <p class="body-mono" style="opacity: 0.6;">AW26</p>
+          </div>
+        </article>
+
+        <article style="flex: 0 0 360px; aspect-ratio: 3/4; position: relative;
+                  background: var(--color-ink); overflow: hidden;">
+          <img src="https://placehold.co/360x480/0a1a2f/66d9ff?text=02"
+               alt="" aria-hidden="true"
+               style="position:absolute; inset:0; width:100%; height:100%;
+                      object-fit: cover; mix-blend-mode: lighten; opacity: 0.7;">
+          <div style="position: absolute; inset: auto 1rem 1rem 1rem;
+                      display: flex; justify-content: space-between; align-items: end;">
+            <p class="body-mono">02 — Orbits</p>
+            <p class="body-mono" style="opacity: 0.6;">AW26</p>
+          </div>
+        </article>
+
+        <article style="flex: 0 0 360px; aspect-ratio: 3/4; position: relative;
+                  background: var(--color-ink); overflow: hidden;">
+          <img src="https://placehold.co/360x480/0a1a2f/66d9ff?text=03"
+               alt="" aria-hidden="true"
+               style="position:absolute; inset:0; width:100%; height:100%;
+                      object-fit: cover; mix-blend-mode: lighten; opacity: 0.7;">
+          <div style="position: absolute; inset: auto 1rem 1rem 1rem;
+                      display: flex; justify-content: space-between; align-items: end;">
+            <p class="body-mono">03 — Tide</p>
+            <p class="body-mono" style="opacity: 0.6;">AW26</p>
+          </div>
+        </article>
+
+        <article style="flex: 0 0 360px; aspect-ratio: 3/4; position: relative;
+                  background: var(--color-ink); overflow: hidden;">
+          <img src="https://placehold.co/360x480/0a1a2f/66d9ff?text=04"
+               alt="" aria-hidden="true"
+               style="position:absolute; inset:0; width:100%; height:100%;
+                      object-fit: cover; mix-blend-mode: lighten; opacity: 0.7;">
+          <div style="position: absolute; inset: auto 1rem 1rem 1rem;
+                      display: flex; justify-content: space-between; align-items: end;">
+            <p class="body-mono">04 — Eclipse</p>
+            <p class="body-mono" style="opacity: 0.6;">AW26</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 6: Closing Wordmark + Footer
+     Reference: Hermes lines 270-284 — full-screen footer reveal
+     =========================================================== -->
+<section class="pattern" data-pattern="6">
+  <p class="pattern__label">Pattern 6 — Closing Wordmark + Footer (Hermes reference)</p>
+
+  <div class="theme-blue" style="background: var(--color-brand); color: var(--color-fg);
+       position: relative; min-height: 100vh; overflow: hidden;">
+
+    <!-- Ghost wordmark behind -->
+    <div aria-hidden="true" class="ghost-text" style="position: absolute;
+         top: 20%; left: 0; right: 0; text-align: center;
+         font-size: clamp(6rem, 18vw, 18rem); font-weight: 300;
+         line-height: 0.8; opacity: 0.15;">Portal</div>
+
+    <div style="position: relative; z-index: 2;
+                padding: var(--section-pad-y) var(--gutter);
+                display: flex; flex-direction: column; align-items: center;
+                text-align: center; gap: var(--space-5);">
+
+      <p class="eyebrow">Free · Plus · Super · Ultra</p>
+
+      <h2 class="display" style="font-size: clamp(3rem, 10vw, 8rem);
+         line-height: 0.9; font-weight: 300; text-transform: uppercase;
+         letter-spacing: 0.03em;">Get Full Access</h2>
+
+      <p class="body-mono" style="opacity: 0.85; max-width: 60ch;">
+        All paid tiers include monthly credits, access to 300+ cutting-edge
+        models, and built-in tool use.
+      </p>
+
+      <a class="btn" href="#plans" style="display:inline-flex; align-items:center;
+         gap: var(--space-3); padding: var(--space-3) var(--space-5);
+         background: var(--fg); color: var(--bg); font-family: var(--font-mono);
+         text-transform: uppercase; letter-spacing: var(--ls-mono);
+         font-size: var(--text-body);">
+        View All Plans
+      </a>
+    </div>
+
+    <footer style="position: absolute; bottom: 7dvh; left: 0; right: 0;
+                   padding-inline: var(--gutter);
+                   display: flex; justify-content: space-between; align-items: end;">
+      <p class="body-mono" style="opacity: 0.6;">v1.0 · 2026</p>
+      <p class="body-mono" style="opacity: 0.6; text-align: right;">
+        Made by humans (mostly)
+      </p>
+    </footer>
+  </div>
+</section>
+
+<!--
+  Auto-init the JS modules so all 6 patterns work in isolation.
+-->
+<canvas data-noise="1" style="position:fixed; inset:0; pointer-events:none;
+        width:100%; height:100%; mix-blend-mode:color-dodge; z-index:101;"></canvas>
+<canvas data-noise="2" style="position:fixed; inset:0; pointer-events:none;
+        width:100%; height:100%; mix-blend-mode:difference; z-index:201;"></canvas>
+
+<script type="module">
+  import { initAllNoise }   from "../js/noise.js";
+  import { initSmoothScroll } from "../js/smooth-scroll.js";
+  import { scramble }       from "../js/scramble.js";
+  import { initParallax, initReveal } from "../js/scroll-parallax.js";
+  import { splitText }      from "../js/type-splitter.js";
+
+  initAllNoise();
+  initSmoothScroll();
+  initParallax();
+  initReveal();
+  splitText();
+  scramble("[data-scramble]", { delay: 600 });
+</script>
+</body>
+</html>

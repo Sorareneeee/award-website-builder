@@ -1,0 +1,50 @@
+# .gitignore — award-website-builder
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (in case anyone adds a build step later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+*.min.js
+*.min.css
+.tmp/
+.cache/
+
+# Local env
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage/
+*.lcov
+
+# Logs
+*.log
+server.log
+
+# Temporary files from generation
+*.bak
+*.orig
+.DS_Store
+```
+
+# Note: this project's assets are intentionally NOT ignored
+# (the CSS / JS / HTML / SVG / prompt files are the product, not build output)

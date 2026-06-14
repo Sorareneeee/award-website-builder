@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this skill in a project, please cite it as below."
+title: "award-website-builder"
+abstract: "A Claude Code Skill that distills Awwwards-tier web design techniques (frame overlay, container query unit systems, triple-stacked canvas noise, animated gradient borders, scroll-driven parallax) from two production-grade reference sites (DICH Fashion, Hermes Desktop). Includes design tokens, zero-dependency JS modules, 12 HTML templates, image generation prompts, and a 48-point self-audit."
+authors:
+  - family-names: "Sorarin"
+    given-names: "."
+    alias: "Sorarin"
+date-released: "2026-06-14"
+version: "1.0.0"
+license: "MIT"
+repository-code: "https://github.com/Sorareneeee/award-website-builder"
+keywords:
+  - "web-design"
+  - "css"
+  - "design-tokens"
+  - "container-queries"
+  - "scroll-animations"
+  - "a11y"
+  - "editorial-design"
+  - "tailwind-css"
+  - "vanilla-js"
+  - "ai-skill"
+  - "claude-code"
+preferred-citation:
+  type: software
+  authors:
+    - family-names: "Sorarin"
+      given-names: "."
+      alias: "Sorarin"
+  title: "award-website-builder: Awwwards-tier web design as a Claude Code Skill"
+  year: 2026
+  url: "https://github.com/Sorareneeee/award-website-builder"

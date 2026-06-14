@@ -1,0 +1,400 @@
+/* ============================================================
+ * effects.css — Visual Effects Library
+ * ------------------------------------------------------------
+ * The signature looks from Hermes Desktop + DICH Fashion,
+ * extracted into a self-contained, themable library.
+ *
+ * Apply by adding the .hw-* / .dich-* classes to a wrapper.
+ *
+ *   <div class="hw-frame">                  → border overlay
+ *   <div class="hw-vignette">               → radial darken
+ *   <div class="hw-noise">                  → noise texture
+ *   <div class="hw-arc">                    → animated gradient border
+ *   <div class="hw-ghost">                  → ultra-faint ghost text
+ *   <div class="dich-shape-x">              → big X decoration
+ *   <div class="dich-cloud">                → soft cloud blob
+ *
+ * All effects are pointer-events:none by default (decorative).
+ * ============================================================ */
+
+/* ============================================================
+ * 1.  FRAME OVERLAY — the Hermes signature
+ * ------------------------------------------------------------
+ * A solid-color border, fixed, full viewport, that "frames" the
+ * page like a photo print. Use --hw-bg to color-match your brand.
+ * ============================================================ */
+
+.frame-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  border: var(--frame) solid var(--bg);
+  pointer-events: none;
+  /* Above the noise, below modals. */
+}
+
+/* ============================================================
+ * 2.  VIGNETTE — radial darken from center outward
+ * ============================================================ */
+
+.vignette {
+  position: relative;
+}
+.vignette::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    120% 90% at 50% 42%,
+    transparent 50%,
+    var(--bg) 100%
+  );
+  opacity: 0.2;
+}
+
+/* ============================================================
+ * 3.  NOISE OVERLAY — film-grain texture
+ * ------------------------------------------------------------
+ * Two ways to apply noise:
+ *   (a) HTML <canvas> via the noise.js module (recommended)
+ *   (b) Tiled PNG fallback (no JS, lower quality)
+ *
+ * The CSS below is for (b). Override --noise-url to point to
+ * your tiled noise PNG (Hermes uses /img/desktop/noise.png).
+ * ============================================================ */
+
+.noise-tiled {
+  position: relative;
+}
+.noise-tiled::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.2;
+  mix-blend-mode: color-burn;
+  background: var(--noise-url, none) 0 0 / var(--noise-size) var(--noise-size);
+}
+
+/* Three preset "noises" for canvas overlays.
+   Use the data attributes to set per-canvas parameters.
+   Hermes stacks three canvases:
+     noise-1: white, density 0.15, color-dodge
+     noise-2: white, density 0.08, difference
+     noise-3: gray,  density 0.25, normal opacity 0.02  */
+[data-noise] {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+[data-noise="1"] { mix-blend-mode: color-dodge; z-index: 101; }
+[data-noise="2"] { mix-blend-mode: difference; z-index: 201; }
+[data-noise="3"] { mix-blend-mode: normal;     z-index: 101; opacity: 0.02; }
+
+/* ============================================================
+ * 4.  ANIMATED ARC BORDER — the hw-arc trick
+ * ------------------------------------------------------------
+ * A 1.25px gradient border that loops. The "border" is achieved
+ * by composing two linear-gradient masks (content-box + border-box)
+ * with mask-composite: exclude. Result: a hollow gradient that
+ * only paints the 1.25px ring.
+ * ============================================================ */
+
+@keyframes arc-stroke {
+  0%   { background-position: 15% 15%; }
+  100% { background-position: 75% 75%; }
+}
+
+.arc-border {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1.25px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  /* The multi-stop gradient that animates */
+  background: linear-gradient(
+    160deg,
+    transparent 0%,
+    var(--fg) 15%,
+    var(--accent) 20%,
+    var(--bg) 25%,
+    transparent 35%, transparent 40%,
+    var(--fg) 55%,
+    var(--accent) 60%,
+    var(--bg) 65%,
+    transparent 75%, transparent 80%,
+    var(--fg) 95%,
+    var(--accent) 100%
+  );
+  background-size: 300% 300%;
+  animation: arc-stroke var(--dur-arc-stroke) linear infinite paused;
+
+  /* Mask trick: two solid-black layers composited with xor,
+     clipped to (content-box, border-box). Result: only the
+     1.25px gap between them is visible. */
+  -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+          mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  -webkit-mask-clip: content-box, border-box;
+          mask-clip: content-box, border-box;
+  -webkit-mask-origin: content-box, border-box;
+          mask-origin: content-box, border-box;
+}
+
+/* Show the arc on hover of an ancestor with .group */
+.group:hover > .arc-border,
+.group:focus-within > .arc-border {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* ============================================================
+ * 5.  GHOST TEXT — the "Nous Portal" footer trick
+ * ------------------------------------------------------------
+ * Ultra-faint uppercase serif, mix-blend-mode: exclusion, 20% op.
+ * The exclusion blend means it always reads as a "shadow" on top
+ * of any background, never disappears.
+ * ============================================================ */
+
+.ghost-text {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  mix-blend-mode: exclusion;
+  color: var(--accent);
+  opacity: 0.2;
+  pointer-events: none;
+  user-select: none;
+  font-weight: 300;
+  line-height: 0.8;
+}
+
+/* ============================================================
+ * 6.  WORDMARK — huge display headline as decoration
+ * ============================================================ */
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--hw-wordmark-size, clamp(4rem, 18vw, 14rem));
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--bg);
+  pointer-events: none;
+  user-select: none;
+  font-weight: 300;
+  line-height: 0.8;
+}
+
+/* ============================================================
+ * 7.  PARALLAX IMAGE — slow translate-y on scroll
+ * ------------------------------------------------------------
+ * Pair with the smooth-scroll.js module which sets
+ * --py-img to drive the transform.
+ * ============================================================ */
+
+.parallax {
+  --py-img: 0px;
+  transform: translate3d(0, var(--py-img), 0) scale(1.22);
+  will-change: transform;
+}
+
+/* ============================================================
+ * 8.  PARALLAX PANEL — clip-pathed panel that slides
+ * ============================================================ */
+
+.parallax-panel {
+  --py: 0px;
+  --clip-bottom: 0px;
+  transform: translate3d(0, var(--py), 0);
+  margin-bottom: var(--py);
+  clip-path: inset(0 0 var(--clip-bottom) 0);
+  will-change: transform;
+}
+
+/* ============================================================
+ * 9.  DICH-STYLE DECORATIONS
+ * ============================================================ */
+
+/* Big X shape, used as section background marker */
+.dich-shape-x {
+  --x-size: 60vmin;
+  --x-thickness: 12vmin;
+  position: relative;
+  width: var(--x-size);
+  height: var(--x-size);
+  pointer-events: none;
+}
+.dich-shape-x::before,
+.dich-shape-x::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+}
+.dich-shape-x::before {
+  /* Diagonal TL→BR */
+  transform: rotate(45deg) scaleX(calc(var(--x-thickness) / var(--x-size)));
+  transform-origin: center;
+  /* Fade edges with mask */
+  mask: radial-gradient(closest-side, #000 30%, transparent 75%);
+  -webkit-mask: radial-gradient(closest-side, #000 30%, transparent 75%);
+}
+.dich-shape-x::after {
+  transform: rotate(-45deg) scaleX(calc(var(--x-thickness) / var(--x-size)));
+  transform-origin: center;
+  mask: radial-gradient(closest-side, #000 30%, transparent 75%);
+  -webkit-mask: radial-gradient(closest-side, #000 30%, transparent 75%);
+}
+
+/* Big circle / orb — dich's "concept totem" */
+.dich-orb {
+  --orb-size: 40vmin;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--accent) 60%, transparent) 0%,
+    var(--accent) 50%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* Decorative dashed-circle outline */
+.dich-circle-dashed {
+  --ring-size: 50vmin;
+  width: var(--ring-size);
+  height: var(--ring-size);
+  border-radius: 50%;
+  border: 2px dashed var(--accent);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Big "INTO THE FUTURE"-style wordmark wall */
+.dich-wordmark-wall {
+  font-family: var(--font-display);
+  font-size: var(--hw-wordmark-size, 18vw);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  font-weight: 300;
+  line-height: 0.85;
+  white-space: nowrap;
+}
+
+/* ============================================================
+ * 10.  SECTION RHYTHM
+ * ============================================================ */
+
+.section {
+  position: relative;
+  padding-block: var(--section-pad-y);
+  padding-inline: var(--gutter);
+}
+
+@media (max-width: 1024px) {
+  .section { padding-block: var(--section-pad-y-tb); padding-inline: var(--gutter-tb); }
+}
+@media (max-width: 640px) {
+  .section { padding-block: var(--section-pad-y-m); padding-inline: var(--gutter-m); }
+}
+
+/* ============================================================
+ * 11.  GLASS / CARD
+ * ============================================================ */
+
+.card-glass {
+  background: color-mix(in srgb, var(--paper) 8%, transparent);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--fg) 8%, transparent);
+}
+
+/* ============================================================
+ * 12.  MARQUEE — dich uses for the "shows" row
+ * ============================================================ */
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--space-6);
+}
+.marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-6);
+  align-items: center;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* ============================================================
+ * 13.  REVEAL HELPERS — pair with scroll observers
+ * ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 0.8s var(--ease-out);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+.reveal-stagger.is-in > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-in > *:nth-child(1) { transition-delay: 0.0s; }
+.reveal-stagger.is-in > *:nth-child(2) { transition-delay: 0.08s; }
+.reveal-stagger.is-in > *:nth-child(3) { transition-delay: 0.16s; }
+.reveal-stagger.is-in > *:nth-child(4) { transition-delay: 0.24s; }
+.reveal-stagger.is-in > *:nth-child(5) { transition-delay: 0.32s; }
+.reveal-stagger.is-in > *:nth-child(6) { transition-delay: 0.40s; }
+
+/* ============================================================
+ * 14.  LETTER-SPACING HELPERS (mono CAPS look)
+ * ============================================================ */
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono-tight);
+  color: var(--fg);
+  opacity: 0.7;
+}
+
+.body-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  line-height: 1.4;
+}

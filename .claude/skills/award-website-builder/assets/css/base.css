@@ -1,0 +1,268 @@
+/* ============================================================
+ * base.css — Reset + Typographic Baseline
+ * ------------------------------------------------------------
+ * A 2024+ baseline that matches the HermeS / DICH tier.
+ * - Replaces the entire <body> default UA style
+ * - Establishes the typographic system (font-smoothing,
+ *   ligatures, text-box-trim where supported)
+ * - Hides/replaces native scrollbars to thin + transparent
+ * - Provides @supports fallbacks for 2019-era browsers
+ *
+ * Pair with: tokens.css (must be loaded first)
+ * ============================================================ */
+
+/* ============================================================
+ * 1.  RESET — modern, single-box model
+ * ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv01", "cv11";
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  color: var(--fg);
+  background: var(--bg);
+  /* Lock horizontal overflow even if a stray element overflows */
+  overflow-x: clip;
+  /* Modern dynamic viewport unit */
+  min-height: 100dvh;
+  /* Suppress the tap-highlight on iOS / Android Chrome */
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: inherit;
+  color: inherit;
+  background: inherit;
+  /* Disable iOS Safari's auto text inflation */
+  text-size-adjust: 100%;
+  /* Beautiful default font weight on macOS */
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Normalize form elements (Hermes does this aggressively) */
+button, input, select, textarea, optgroup {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  opacity: 1;
+}
+
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+
+::placeholder {
+  opacity: 0.5;
+  color: currentColor;
+}
+
+/* Remove default fieldset/legend styling */
+fieldset { border: 0; }
+
+/* Lists: semantic but visually zero */
+ul, ol, menu { list-style: none; }
+
+/* Media: block by default, capped at container width */
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  border-color: inherit;
+}
+
+/* Hidden attribute (no longer needs [hidden] { display:none } polyfill) */
+[hidden] { display: none !important; }
+
+/* Inherit color for links */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Strong / bold keep default */
+b, strong { font-weight: bolder; }
+
+/* Sub / sup */
+sub, sup {
+  position: relative;
+  vertical-align: baseline;
+  font-size: 75%;
+  line-height: 0;
+}
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+/* ============================================================
+ * 2.  TYPOGRAPHIC BASELINE
+ * ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  /* Trim the cap-height box (Safari / Chrome 2024+) */
+  text-box-edge: cap alphabetic;
+  text-box-trim: trim-both;
+}
+
+p { text-wrap: pretty; }
+h1, h2, h3, h4 { text-wrap: balance; }
+
+/* Selection */
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+/* ============================================================
+ * 3.  SCROLLBAR — thin, theme-aware
+ * ============================================================ */
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+html:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.32) transparent;
+}
+
+/* WebKit / Blink */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-button { display: none; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  min-height: 1rem;
+}
+html:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* ============================================================
+ * 4.  UTILITY CLASSES — bare minimum, prefer Tailwind
+ * ============================================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+
+.fullscreen {
+  position: fixed; inset: 0;
+  pointer-events: none;
+}
+
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.normal-case { text-transform: none; }
+
+.mono { font-family: var(--font-mono); }
+.serif { font-family: var(--font-serif); }
+.display { font-family: var(--font-display); }
+.sans { font-family: var(--font-sans); }
+
+.tracked { letter-spacing: var(--ls-mono); }
+.tracked-tight { letter-spacing: var(--ls-mono-tight); }
+
+/* Container primitive: any element with .container becomes a
+ * container query context so children's --u scales with the
+ * element, not the viewport. Use heavily inside cards / panels. */
+.container {
+  container-type: inline-size;
+}
+
+/* ============================================================
+ * 5.  ANCHOR SCROLL OFFSET — prevent headings from hiding
+ *     behind a fixed nav.
+ * ============================================================ */
+
+html { scroll-padding-top: var(--frame); }
+
+[id] { scroll-margin-top: var(--frame); }
+
+/* ============================================================
+ * 6.  FOCUS — visible, never ugly
+ * ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Suppress focus for mouse users on the brand mark etc. */
+:focus:not(:focus-visible) { outline: none; }
+
+/* ============================================================
+ * 7.  REDUCED MOTION — honor user preference
+ * ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+ * 8.  2019-ERA FALLBACKS
+ *     If the browser doesn't support container queries, swap
+ *     --u (cqw) for vw so layouts still scale fluidly. JS can
+ *     detect via CSS.supports('container-type', 'inline-size').
+ * ============================================================ */
+
+@supports not (container-type: inline-size) {
+  :root { --u: calc(100vw / 23.6); }   /* 23.6 ≈ 2360/100 */
+}
+
+/* If color-mix() unsupported, hard-code backgrounds */
+@supports not (color: color-mix(in srgb, #000, #fff)) {
+  :root {
+    --color-warm:        #ffdfc4;
+    --color-lemon:       #ffff82;
+    --color-peach:       #ffebb0;
+    --color-purple:      #cfb8ff;
+    --color-blue:        #c5c4ff;
+    --color-violet:      #e8a5f3;
+    --color-yellow-soft: #ffffcc;
+  }
+}
+
+/* If dvh unsupported, fall back to vh */
+@supports not (height: 100dvh) {
+  :root { --dvh: 1vh; }
+}
+@supports (height: 100dvh) {
+  :root { --dvh: 1dvh; }
+}

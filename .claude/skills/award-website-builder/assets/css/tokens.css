@@ -1,0 +1,275 @@
+/* ============================================================
+ * tokens.css — Design Tokens for Award-Winning Sites
+ * ------------------------------------------------------------
+ * Source: distilled from DICH Fashion (Webflow) + Hermes Desktop
+ *         (Nous Research). All values are mode-able; remap the
+ *         :root custom properties to re-skin a project.
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="assets/css/tokens.css">
+ *   <link rel="stylesheet" href="assets/css/base.css">
+ *   <link rel="stylesheet" href="assets/css/effects.css">
+ *
+ *   Then OPTIONALLY re-declare --hw-bg / --hw-fg / --hw-accent
+ *   inside a wrapper .theme-* selector to re-skin a section.
+ *
+ * Browser support: container queries, cqw, dvh, color-mix,
+ * clamp(), :has() — all baseline 2024+ browsers.
+ * For 2019-era browsers, swap --u (cqw) for vw; see base.css
+ * for the @supports fallback block.
+ * ============================================================ */
+
+:root {
+  /* ---------- Brand: a default Hermes-style blue palette ----------
+   * Override --color-brand, --color-paper, --color-fg, --color-accent
+   * to re-skin the entire system. Examples: see prompts/color-palettes.md
+   */
+  --color-brand:  #0000f2;   /* hermes blue */
+  --color-paper:  #ffffff;   /* main paper / cards */
+  --color-fg:     #f5f5f5;   /* text on brand */
+  --color-accent: #edff45;   /* electric highlight */
+
+  /* ---------- Optional second tone (used by dich-style) ----------
+   * If your brand is dich-style (warm pastel + black), flip these:
+   *   --color-warm:  #ffdfc4;
+   *   --color-ink:   #070707;
+   */
+  --color-warm:   #ffdfc4;
+  --color-ink:    #070707;
+  --color-brown:  #39322d;
+  --color-dark-coral: #5c2c45;
+
+  /* Decorative auxiliaries */
+  --color-lemon:    #ffff82;
+  --color-peach:    #ffebb0;
+  --color-purple:   #cfb8ff;
+  --color-blue:     #c5c4ff;
+  --color-violet:   #e8a5f3;
+  --color-yellow-soft: #ffffcc;
+  --color-light-black: #141414;
+  --color-dark-green:  #444241;
+
+  /* Section-level semantic aliases (use these in components).
+     These default to the brand palette above; .theme-* classes
+     re-declare them to re-skin an entire section/site. */
+  --bg:           var(--color-brand);
+  --fg:           var(--color-fg);
+  --paper:        var(--color-paper);
+  --accent:       var(--color-accent);
+  --ink:          var(--color-ink);
+
+  /* Section-level semantic aliases (use these in components) */
+  --bg:           var(--color-brand);
+  --fg:           var(--color-fg);
+  --paper:        var(--color-paper);
+  --accent:       var(--color-accent);
+
+  /* Selection */
+  --selection-bg: var(--color-accent);
+  --selection-fg: var(--color-brand);
+
+  /* ===========================================================
+   * TYPOGRAPHY
+   * The system is split into 4 ROLES, not 4 fonts.
+   * Swap fonts to taste; keep the role structure.
+   * =========================================================== */
+
+  /* Role 1 — DISPLAY (huge headings, wordmarks) */
+  --font-display:
+    "Sigurd Variable", "Times New Roman", "T 012", "Mondwest", serif;
+  --fw-display: 300;            /* light/regular for editorial feel */
+  --lh-display: 0.88;           /* tight to 0.8–0.95 for wordmarks */
+  --ls-display: 0.03em;
+
+  /* Role 2 — SANS (body, links, nav) */
+  --font-sans:
+    "Collapse", "Inter", "Helvetica Neue", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --fw-sans: 400;
+  --fw-sans-bold: 700;
+  --fw-sans-extrabold: 800;
+  --lh-sans: 1.5;
+  --ls-sans: 0;
+
+  /* Role 3 — MONO (eyebrow labels, micro-copy, code) */
+  --font-mono:
+    "Courier Prime", "JetBrains Mono", "SF Mono", ui-monospace,
+    Menlo, Consolas, monospace;
+  --fw-mono: 400;
+  --lh-mono: 1.4;
+  --ls-mono: 0.1em;             /* tracked-out CAPS look */
+  --ls-mono-tight: 0.18em;      /* even looser for super-eyebrow */
+
+  /* Role 4 — SECONDARY (rare accent serif, e.g. dich's NB Architekt) */
+  --font-serif:
+    "NB Architekt Std", "Spectral", "EB Garamond", "Times New Roman", serif;
+
+  /* Type scale (clamp-based for fluid sizing) */
+  --text-eyebrow:  0.875rem;   /* 14px */
+  --text-body:     1.0625rem;  /* 17px (Hermes' size) */
+  --text-lead:     1.25rem;    /* 20px */
+  --text-h4:       clamp(1.25rem, 2vw, 1.5rem);
+  --text-h3:       clamp(1.5rem, 3vw, 2.25rem);
+  --text-h2:       clamp(2rem, 5vw, 4rem);
+  --text-h1:       clamp(3rem, 8vw, 6.5rem);
+  --text-display:  clamp(4rem, 12vw, 11rem);  /* wordmark scale */
+
+  /* ===========================================================
+   * SPACING — Container Query unit system
+   * This is THE single most important technique of Hermes.
+   * Everything (gutter, gap, padding, font-size) is a multiple
+   * of a single root unit --u derived from the element's own
+   * container width. → Perfectly proportional at any size.
+   * =========================================================== */
+
+  /* Base unit. Override this INSIDE a container (with
+     container-type: inline-size) to re-scale. The 2360 constant
+     is the design's "canonical" width in px. */
+  --u: calc(100cqw / 2360);
+
+  /* Spacing scale (multiples of --u) */
+  --space-1:  calc(8  * var(--u));
+  --space-2:  calc(15 * var(--u));
+  --space-3:  calc(20 * var(--u));
+  --space-4:  calc(24 * var(--u));
+  --space-5:  calc(30 * var(--u));
+  --space-6:  calc(50 * var(--u));
+  --space-7:  calc(60 * var(--u));
+  --space-8:  calc(93 * var(--u));   /* hw-edge */
+  --space-9:  calc(135 * var(--u));
+  --space-10: calc(210 * var(--u));  /* hw-gutter */
+
+  /* Section vertical rhythm */
+  --section-pad-y:    4.44em;        /* desktop */
+  --section-pad-y-tb: 8.33em;        /* tablet */
+  --section-pad-y-m:  12.8em;        /* mobile (dich: very generous) */
+
+  /* Page horizontal gutters */
+  --gutter:           5.55em;        /* desktop */
+  --gutter-tb:        7.55em;
+  --gutter-m:         3.4em;
+  --gutter-m-p:       5.6em;
+
+  /* Frame overlay thickness (Hermes' defining trick) */
+  --frame:           calc(2.5 * (0.5vw + 0.5vh));
+
+  /* ===========================================================
+   * MOTION — easings, durations, choreography
+   * =========================================================== */
+
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);   /* default reveal */
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft:    cubic-bezier(0.4, 0, 0.2, 1);   /* material standard */
+
+  --dur-1:  0.15s;     /* micro (hover) */
+  --dur-2:  0.3s;      /* small (button) */
+  --dur-3:  0.5s;      /* medium (reveal) */
+  --dur-4:  0.8s;      /* large (section) */
+  --dur-5:  1.2s;      /* hero (slow & confident) */
+  --dur-arc-stroke: 2.23s;   /* Hermes hw-arc keyframe loop */
+
+  /* ===========================================================
+   * EFFECTS
+   * =========================================================== */
+
+  --shadow-soft:  0 4px 14px rgba(0, 0, 0, 0.25);
+  --shadow-hard:  0 16px 48px rgba(0, 0, 0, 0.35);
+  --shadow-glow:  0 0 40px var(--accent);
+
+  --blur-sm: 8px;
+  --blur-md: 12px;
+  --blur-lg: 24px;
+
+  /* Noise tile (Hermes uses a 12.8rem tile from /img/desktop/noise.png) */
+  --noise-size: 12.8rem;
+
+  /* Corner radius (kept tight — premium sites are square) */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-pill: 9999px;
+
+  /* ===========================================================
+   * BREAKPOINTS — for media queries (CSS only; JS checks below)
+   * =========================================================== */
+
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1600px;
+}
+
+/* =============================================================
+ * THEME PRESETS — flip the wrapper class to re-skin an entire site.
+ * Each .theme-* block re-declares the four brand tokens; the rest
+ * of the cascade follows automatically.
+ * ============================================================= */
+
+.theme-warm {
+  --color-brand:  #ffdfc4;       /* dich main bg */
+  --color-paper:  #fff;
+  --color-fg:     #070707;
+  --color-accent: #edff45;
+  --bg: var(--color-brand);
+  --fg: var(--color-fg);
+  --paper: var(--color-paper);
+  --accent: var(--color-accent);
+}
+
+.theme-acid {
+  --color-brand:  #0000f2;
+  --color-paper:  #fff;
+  --color-fg:     #f5f5f5;
+  --color-accent: #c8ff00;       /* sharper green */
+}
+
+.theme-ink {
+  --color-brand:  #0a0a0a;
+  --color-paper:  #f0eee5;       /* warm cream */
+  --color-fg:     #f0eee5;
+  --color-accent: #ff5722;       /* safety orange */
+}
+
+.theme-aurora {
+  --color-brand:  #050018;       /* near-black violet */
+  --color-paper:  #faf7ff;
+  --color-fg:     #e6e1ff;
+  --color-accent: #66ffda;       /* mint */
+}
+
+.theme-cinema {
+  --color-brand:  #1a0000;       /* oxblood */
+  --color-paper:  #efe8d8;       /* bone */
+  --color-fg:     #efe8d8;
+  --color-accent: #ffb800;       /* cinema gold */
+}
+
+.theme-clay {
+  --color-brand:  #e9e0d0;       /* terracotta light */
+  --color-paper:  #1c1a17;
+  --color-fg:     #1c1a17;
+  --color-accent: #ff5722;       /* burnt orange */
+}
+
+.theme-mint {
+  --color-brand:  #b9f5d8;       /* soft mint */
+  --color-paper:  #0e2f25;
+  --color-fg:     #0e2f25;
+  --color-accent: #ff4081;       /* hot pink */
+}
+
+.theme-glacier {
+  --color-brand:  #0a1a2f;       /* deep navy */
+  --color-paper:  #e0f4ff;
+  --color-fg:     #cce7ff;
+  --color-accent: #66d9ff;       /* ice */
+}
+
+.theme-sunset {
+  --color-brand:  #2a0a1e;       /* mulberry */
+  --color-paper:  #ffe4b3;
+  --color-fg:     #ffe4b3;
+  --color-accent: #ff5c8a;       /* coral pink */
+}

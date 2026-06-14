@@ -1,0 +1,22 @@
+# Funding
+
+This project is **MIT-licensed** and developed in spare time. If it saved you hours of design work, consider supporting its development:
+
+- ⭐ **Star the repo** — the easiest way to show appreciation
+- 🐛 **File issues** — every bug report is a contribution
+- 💻 **Submit PRs** — every accepted pattern adds to the library
+- 📣 **Tell a colleague** — word of mouth grows the community
+
+## Sponsorship
+
+We don't currently accept financial sponsorship. If you'd like to sponsor a specific feature (e.g., a new mood preset, a new framework wrapper), open a Discussion with the `sponsorship` label and we'll coordinate.
+
+## Maintainer time
+
+This skill is maintained by [@Sorarin](https://github.com/Sorararin) in evenings and weekends. Response times:
+- **Security issues**: within 72h
+- **Bug reports**: within 1 week
+- **Feature requests**: best-effort, no SLA
+- **PRs**: usually reviewed within 1 week
+
+If you need faster support, GitHub Sponsors will be enabled once the project reaches 1,000 stars.
