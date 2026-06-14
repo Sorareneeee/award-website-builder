@@ -12,16 +12,14 @@
  *     Loads a Spline <canvas> (via their data-spline-url attr)
  *     and applies scroll-driven opacity + Y-parallax on the
  *     wrapper element. Rotational control is delegated to
- *     Spline's built-in scroll event (if your Spline scene
- *     defines a "Scroll" event channel).
+ *     Spline's built-in scroll event (if scene defines one).
  *
  *   Both modes share the same scroll-binding API so you can
  *   swap Modes by changing one attribute in the HTML.
  *
  * Usage — Mode A (Three.js, default):
- *   <div id="webgl-rock"
- *        data-three-scene
- *        data-shape="torusKnot"    // icosahedron | torusKnot | octahedron | sphere
+ *   <div data-three-scene
+ *        data-shape="torusKnot"    // icosahedron | torusKnot | octahedron | sphere | torus | dodecahedron | box
  *        data-color="#cfb8ff"
  *        data-wireframe="false"
  *        data-rotation-speed="0.5"
@@ -30,39 +28,25 @@
  *   </div>
  *
  * Usage — Mode B (Spline embed):
- *   <div id="spline-rock"
- *        data-spline-scene
+ *   <div data-spline-scene
  *        data-spline-url="https://prod.spline.design/xxxxx/scene.splinecode"
  *        data-parallax-speed="0.15"
  *        style="width:100%; height:60vh;">
  *   </div>
  *
  * Scroll API (both modes):
- *   The Y-rotation maps 0 → 2π across the element's visible scroll
- *   range. As the user scrolls the element from viewport-bottom to
- *   viewport-top, the object completes one full rotation.
+ *   Y-rotation maps 0 → 2π across the element's visible scroll range.
+ *   Y-parallax translates at fraction of scroll speed (data-parallax-speed).
  *
- *   The Y-parallax translates the element at a fraction of the
- *   scroll speed (configured via data-parallax-speed). This
- *   creates the "floating / detached" feel that DICH and
- *   Battery/Energizer sites use.
- *
- * Pair with effects.css:
- *   .webgl-container { position: relative; overflow: hidden; }
- *   .webgl-container canvas { display: block; width: 100% !important; }
- *
- * Browser support:
- *   Mode A: Three.js CDN (ESM). Chrome 61+, Firefox 60+, Safari 11+.
- *   Mode B: Spline player (auto-loaded). Chrome 89+, Firefox 108+.
- *   Both use rAF + scrollY, compatible with 2019-era browsers.
+ * Browser: Mode A needs Three.js CDN, Chrome 61+. Mode B needs Spline SDK.
  * ============================================================= */
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
 
 /* ---------- defaults ---------- */
 const TUNING = {
-  rotationMap: Math.PI * 2,   // full rotation per element lifecycle
-  parallaxFactor: 0.15,       // fraction of scroll delta
+  rotationMap: Math.PI * 2,
+  parallaxFactor: 0.15,
   cameraZ: 6,
 };
 
@@ -127,7 +111,7 @@ export function initThreeScene(el, opts = {}) {
   const mesh = new THREE.Mesh(geo, mat);
   scene.add(mesh);
 
-  /* --- optional: second inner mesh with wireframe overlay --- */
+  /* --- optional second mesh with wireframe overlay --- */
   if (!wireframe) {
     const wireMat = new THREE.MeshBasicMaterial({
       color: color,
@@ -144,14 +128,10 @@ export function initThreeScene(el, opts = {}) {
   function getScrollProgress() {
     const rect = el.getBoundingClientRect();
     const vh = window.innerHeight;
-    // progress 0 when el-bottom = viewport-bottom
-    // progress 1 when el-top = viewport-top
     const elCenter = rect.top + rect.height / 2;
     const viewCenter = vh / 2;
-    // normalized: -1 (off top), 0 (center), 1 (off bottom)
     const raw = (elCenter - viewCenter) / (vh / 2 + rect.height / 2);
     const clamped = Math.max(-1, Math.min(1, raw));
-    // map -1→1 to 0→1 (0 = fully visible center, 1 = scrolled past)
     return (1 - clamped) / 2;
   }
 
@@ -161,13 +141,11 @@ export function initThreeScene(el, opts = {}) {
   function update() {
     const p = getScrollProgress();
     const targetRotation = p * o.rotationMap * rotSpeed;
-    // Smooth interpolation (lerp) for jank-free rotation
     currentRotation += (targetRotation - currentRotation) * 0.08;
 
     mesh.rotation.x = currentRotation * 0.3;
     mesh.rotation.y = currentRotation;
 
-    // Y parallax: translate the container
     const yTarget = -(p - 0.5) * el.offsetHeight * parallax * 2;
     currentY += (yTarget - currentY) * 0.06;
     renderer.domElement.style.transform = `translate3d(0, ${currentY}px, 0)`;
@@ -182,7 +160,6 @@ export function initThreeScene(el, opts = {}) {
   }
   loop();
 
-  /* --- resize --- */
   function onResize() {
     const nw = el.clientWidth;
     const nh = el.clientHeight;
@@ -221,10 +198,8 @@ export function initSplineScene(el, opts = {}) {
     const script = document.createElement("script");
     script.id = scriptId;
     script.type = "module";
-    script.textContent = `
-      import { Application } from "https://unpkg.com/@splinetool/runtime@1.9.35/build/runtime.js";
-      window.__splineRuntime = { Application };
-    `;
+    script.textContent = `import { Application } from "https://unpkg.com/@splinetool/runtime@1.9.35/build/runtime.js";
+window.__splineRuntime = { Application };`;
     document.body.appendChild(script);
   }
 
@@ -246,7 +221,7 @@ export function initSplineScene(el, opts = {}) {
       app = new Application(canvas);
       await app.load(url);
     } catch (err) {
-      console.warn("Spline load failed (maybe blocked):", err.message);
+      console.warn("Spline load failed:", err.message);
     }
   }
   loadSpline();
@@ -267,10 +242,6 @@ export function initSplineScene(el, opts = {}) {
     currentY += (targetY - currentY) * 0.06;
     canvas.style.transform = `translate3d(0, ${currentY}px, 0)`;
 
-    /* If Spline exposes a variable, set it here.
-       In Spline editor: add a "Number Variable" named "scrollProgress"
-       and map it to the Y-rotation of your object.
-       This line pushes the value into the scene at runtime. */
     if (app && app.findObjectByName && app.setVariable) {
       try { app.setVariable("scrollProgress", Math.round(p * 100) / 100); }
       catch (_) {}
