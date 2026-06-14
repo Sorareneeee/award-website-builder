@@ -14,8 +14,9 @@
     2.  Pastel Magazine        (DICH ref)  — pastel + huge centered display
     3.  Video Frame            (Hermes ref) — letterboxed video with frame overlay
     4.  3D Cosmic              (Mood E)     — half-bleed cosmic gradient
-    5.  Type-Only Marquee      (any)        — ticker over monochrome
-    6.  Split-Screen Reveal    (any)        — left/right asymmetric
+    5.  3D Scroll Object       (DICH ref)  — procedural three.js mesh + scroll rotation
+    6.  Type-Only Marquee      (any)        — ticker over monochrome
+    7.  Split-Screen Reveal    (any)        — left/right asymmetric
 
   Pattern 1 is the canonical "Hermes hero" — most projects start here.
   ===============================================================
@@ -194,10 +195,51 @@
 </section>
 
 <!-- ===========================================================
-     PATTERN 5: Type-Only Marquee
-     For: ticker / launch / "always-on" brands
+     PATTERN 5: 3D Scroll Object (DICH-style rock + Energizer-style whirly thing)
+     Reference: DICH Fashion's Spline + Three.js hybrid; also Energizer / Duracell /
+               Amazon "scroll-driven 3D" product reveals.
+     Uses the three-scene.js module (Mode A by default).
      =========================================================== -->
 <section class="pattern" data-pattern="5">
+  <p class="pattern__label">Pattern 5 — 3D Scroll Object (DICH / Energizer reference)</p>
+
+  <div class="theme-warm" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) var(--gutter);
+       display: flex; flex-direction: column; align-items: center;
+       justify-content: center; min-height: clamp(600px, 80vh, 1000px);
+       text-align: center; position: relative; overflow: hidden;">
+
+    <p class="eyebrow" data-reveal>Scroll Rotation · Three.js</p>
+
+    <h2 class="display" data-reveal data-split="chars"
+        style="font-size: clamp(2.5rem, 6vw, 5rem);
+               line-height: 0.88; font-weight: 300; text-transform: uppercase;
+               letter-spacing: 0.01em; max-width: 14ch; margin-bottom: 2rem;">
+      Rotating Object
+    </h2>
+
+    <!-- The 3D container — `data-three-scene` activates three-scene.js -->
+    <!-- Try shape="torusKnot" | "icosahedron" | "octahedron" | "sphere" | "torus" -->
+    <div data-three-scene data-shape="torusKnot"
+         data-color="#5c2c45"
+         data-wireframe="false"
+         data-rotation-speed="0.8"
+         data-parallax-speed="0.12"
+         style="width: 80vmin; height: 80vmin; max-width: 600px; max-height: 600px;
+                container-type: inline-size;">
+    </div>
+
+    <p class="body-mono" data-reveal style="margin-top: 2rem; max-width: 50ch; opacity: 0.7;">
+      This mesh rotates 360° as you scroll past it.
+      <br>Try <code>data-shape="icosahedron"</code> for a DICH-style "rock".
+    </p>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 6: Type-Only Marquee (same as old pattern 5)
+     =========================================================== -->
+<section class="pattern" data-pattern="6">
   <p class="pattern__label">Pattern 5 — Type-Only Marquee</p>
 
   <div class="theme-ink" style="background: var(--color-brand); color: var(--color-fg);
@@ -229,11 +271,10 @@
 </section>
 
 <!-- ===========================================================
-     PATTERN 6: Split-Screen Reveal
-     For: launch / transition / "before-after" reveals
+     PATTERN 7: Split-Screen Reveal (same as old pattern 6)
      =========================================================== -->
-<section class="pattern" data-pattern="6">
-  <p class="pattern__label">Pattern 6 — Split-Screen Reveal</p>
+<section class="pattern" data-pattern="7">
+  <p class="pattern__label">Pattern 7 — Split-Screen Reveal</p>
 
   <div class="theme-clay" style="display: grid; grid-template-columns: 1fr 1fr;
        min-height: clamp(600px, 80vh, 900px); overflow: hidden;">
@@ -293,6 +334,7 @@
   import { scramble }       from "../js/scramble.js";
   import { initParallax, initReveal } from "../js/scroll-parallax.js";
   import { splitText }      from "../js/type-splitter.js";
+  import { initAll3D }     from "../js/three-scene.js";
 
   initAllNoise();
   initSmoothScroll();
@@ -300,6 +342,6 @@
   initReveal();
   splitText();
   scramble("[data-scramble]", { delay: 600 });
-</script>
+  initAll3D();
 </body>
 </html>
