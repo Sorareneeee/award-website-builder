@@ -1,1 +1,338 @@
-$(cat /e/workshopForClaude/workshopForClaude/.claude/skills/award-website-builder/assets/html/hero-patterns.html)
+<!--
+  ===============================================================
+  hero-patterns.html — 6 reusable hero block patterns
+  ---------------------------------------------------------------
+  Each <section data-pattern="N"> is a self-contained, copy-paste-
+  ready hero block. All patterns share the same :root design
+  tokens (assets/css/tokens.css + base.css + effects.css).
+
+  To preview: open this file in a browser, OR include the assets
+  folder in your project. All assets are relative.
+
+  Patterns:
+    1.  Editorial Display     (Hermes ref) — giant serif + small figure
+    2.  Pastel Magazine        (DICH ref)  — pastel + huge centered display
+    3.  Video Frame            (Hermes ref) — letterboxed video with frame overlay
+    4.  3D Cosmic              (Mood E)     — half-bleed cosmic gradient
+    5.  3D Scroll Object       (DICH ref)  — procedural three.js mesh + scroll rotation
+    6.  Type-Only Marquee      (any)        — ticker over monochrome
+    7.  Split-Screen Reveal    (any)        — left/right asymmetric
+  ===============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero Patterns — Award-Winning Site Library</title>
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/effects.css">
+<style>
+  body { padding-block: 5rem; }
+  .pattern {
+    border-block: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    padding-block: 4rem;
+    margin-block: 2rem;
+  }
+  .pattern__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-mono-tight);
+    opacity: 0.6;
+    margin-bottom: 2rem;
+  }
+  .container { container-type: inline-size; }
+</style>
+</head>
+<body>
+
+<!-- ===========================================================
+     PATTERN 1: Editorial Display (Hermes-style)
+     Reference: Hermes Desktop, lines 207-214 of original
+     =========================================================== -->
+<section class="pattern container" data-pattern="1">
+  <p class="pattern__label">Pattern 1 — Editorial Display (Hermes reference)</p>
+
+  <header class="frame-overlay-section">
+    <div class="theme-blue" style="background: var(--color-brand); color: var(--color-fg);
+       position: relative; padding: var(--space-9) var(--gutter);
+       min-height: clamp(560px, 80vh, 900px);
+       display: flex; align-items: center; overflow: hidden;">
+
+      <img
+        alt=""
+        aria-hidden="true"
+        data-parallax-speed="0.15"
+        style="position:absolute; right: var(--space-9); top: 0; height: 110%;
+               width: 50%; object-fit: contain; object-position: top;
+               mix-blend-mode: lighten; pointer-events: none;"
+        src="https://placehold.co/1200x1400/0000f2/f5f5f5?text=Hero+Art"
+      >
+
+      <div style="position:relative; z-index:2; max-width: 56ch;">
+        <p class="eyebrow">Open Source · MIT License</p>
+
+        <h1 class="display" style="font-size: var(--text-h1);
+           line-height: 0.88; font-weight: 300; margin-block: 1.5rem;
+           text-transform: uppercase; letter-spacing: 0.03em;">
+          The Agent<br>That Grows<br>With You
+        </h1>
+
+        <div style="display:flex; gap: 1rem; margin-top: 2rem;">
+          <a class="btn" href="#downloads" style="display:inline-flex; align-items:center;
+             gap: var(--space-3); padding: var(--space-3) var(--space-5);
+             background: var(--fg); color: var(--bg); font-family: var(--font-mono);
+             text-transform: uppercase; letter-spacing: var(--ls-mono);
+             font-size: var(--text-body); border-radius: 0;">
+            <span data-scramble="Download">Download</span>
+            <svg width="0.7em" height="0.7em" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14m0 0-6-6m6 6-6 6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+</section>
+
+<!-- ===========================================================
+     PATTERN 2: Pastel Magazine (DICH-style)
+     Reference: DICH Fashion, .section_hero of the original
+     =========================================================== -->
+<section class="pattern" data-pattern="2">
+  <p class="pattern__label">Pattern 2 — Pastel Magazine (DICH reference)</p>
+
+  <div class="theme-warm" style="background: var(--color-brand); color: var(--color-fg);
+       position: relative; padding: var(--section-pad-y) var(--gutter);
+       min-height: clamp(700px, 90vh, 1100px);
+       display: flex; flex-direction: column; justify-content: center;
+       align-items: center; text-align: center; overflow: hidden;">
+
+    <p class="eyebrow" data-reveal>A New Era of Futuristic Fashion</p>
+
+    <h1 class="display" data-split="chars" data-reveal
+        style="font-size: clamp(4rem, 12vw, 11rem);
+        line-height: 0.85; font-weight: 400; text-transform: uppercase;
+        letter-spacing: 0.01em; margin-block: 2rem; max-width: 18ch;">
+      Future Mode of DICH
+    </h1>
+
+    <p class="body-mono" data-reveal style="max-width: 50ch; opacity: 0.7;">
+      Innovative designs that blend perfection and elegance,
+      setting new trends in luxury apparel.
+    </p>
+
+    <a class="btn" href="#shop" data-reveal style="margin-top: var(--space-6);
+       padding: var(--space-3) var(--space-5);
+       background: var(--color-ink); color: var(--color-warm);
+       font-family: var(--font-mono); text-transform: uppercase;
+       letter-spacing: var(--ls-mono);">Discover the Collection</a>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 3: Video Frame (Hermes preview section)
+     Reference: Hermes lines 216-219 — letterboxed video with frame border
+     =========================================================== -->
+<section class="pattern" data-pattern="3">
+  <p class="pattern__label">Pattern 3 — Video Frame (Hermes preview reference)</p>
+
+  <div class="theme-blue" style="background: var(--color-brand); padding: var(--gutter);">
+    <div style="position: relative; aspect-ratio: 2174/1273; overflow: hidden;
+                border: calc(20 * var(--u)) solid var(--color-brand);">
+      <video style="position:absolute; inset:0; width:100%; height:100%;
+                    object-fit: cover; object-position: center;" autoplay loop
+             muted playsinline
+             poster="https://placehold.co/1920x1080/0000f2/edff45?text=Video+Poster">
+        <source src="https://download.samplelib.com/mp4/sample-30s.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 4: 3D Cosmic (Mood E)
+     For AI/dev brands. Self-illuminated gradient + object.
+     =========================================================== -->
+<section class="pattern" data-pattern="4">
+  <p class="pattern__label">Pattern 4 — 3D Cosmic (Mood E reference)</p>
+
+  <div class="theme-aurora" style="background: var(--color-brand); color: var(--color-fg);
+       position: relative; padding: var(--section-pad-y) var(--gutter);
+       min-height: clamp(700px, 90vh, 1100px);
+       display: flex; align-items: center; overflow: hidden;">
+
+    <div style="position:absolute; inset: 0;
+                background:
+                  radial-gradient(ellipse at 70% 30%,
+                    color-mix(in srgb, var(--color-accent) 30%, transparent) 0%,
+                    transparent 60%),
+                  radial-gradient(ellipse at 30% 70%,
+                    color-mix(in srgb, var(--color-secondary) 25%, transparent) 0%,
+                    transparent 60%);
+                pointer-events: none;"></div>
+
+    <div style="position: relative; z-index: 2; max-width: 56ch;">
+      <p class="eyebrow">Frontier Models · 2026</p>
+      <h1 class="display" style="font-size: var(--text-h1);
+         line-height: 0.9; font-weight: 300; margin-block: 1.5rem;
+         text-transform: uppercase; letter-spacing: 0.03em;">
+        Models that<br>Reason Across<br>Modalities
+      </h1>
+      <p class="body-mono" style="opacity: 0.7; max-width: 50ch;">
+        One API. Every model. Native vision, audio, and code.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 5: 3D Scroll Object (DICH-style rock + Energizer-style whirly thing)
+     Reference: DICH Fashion's Spline + Three.js hybrid; also Energizer / Duracell /
+               Amazon "scroll-driven 3D" product reveals.
+     Uses the three-scene.js module (Mode A by default).
+     =========================================================== -->
+<section class="pattern" data-pattern="5">
+  <p class="pattern__label">Pattern 5 — 3D Scroll Object (DICH / Energizer reference)</p>
+
+  <div class="theme-warm" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) var(--gutter);
+       display: flex; flex-direction: column; align-items: center;
+       justify-content: center; min-height: clamp(600px, 80vh, 1000px);
+       text-align: center; position: relative; overflow: hidden;">
+
+    <p class="eyebrow" data-reveal>Scroll Rotation · Three.js</p>
+
+    <h2 class="display" data-reveal data-split="chars"
+        style="font-size: clamp(2.5rem, 6vw, 5rem);
+               line-height: 0.88; font-weight: 300; text-transform: uppercase;
+               letter-spacing: 0.01em; max-width: 14ch; margin-bottom: 2rem;">
+      Rotating Object
+    </h2>
+
+    <div data-three-scene data-shape="torusKnot"
+         data-color="#5c2c45"
+         data-wireframe="false"
+         data-rotation-speed="0.8"
+         data-parallax-speed="0.12"
+         style="width: 80vmin; height: 80vmin; max-width: 600px; max-height: 600px;
+                container-type: inline-size;">
+    </div>
+
+    <p class="body-mono" data-reveal style="margin-top: 2rem; max-width: 50ch; opacity: 0.7;">
+      This mesh rotates 360° as you scroll past it.
+      <br>Try <code>data-shape="icosahedron"</code> for a DICH-style rock.
+    </p>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 6: Type-Only Marquee
+     For: ticker / launch / always-on brands
+     =========================================================== -->
+<section class="pattern" data-pattern="6">
+  <p class="pattern__label">Pattern 6 — Type-Only Marquee</p>
+
+  <div class="theme-ink" style="background: var(--color-brand); color: var(--color-fg);
+       padding: var(--section-pad-y) 0; overflow: hidden;">
+
+    <p class="eyebrow" style="text-align: center; margin-bottom: var(--space-6);">
+      Live · 2026 · 24 hours
+    </p>
+
+    <div class="marquee" style="--space-6: 4rem;">
+      <div class="marquee__track" style="font-family: var(--font-display);
+        font-size: clamp(3rem, 8vw, 7rem); font-weight: 300;
+        text-transform: uppercase; letter-spacing: 0.01em; line-height: 1;">
+        <span>Think Different</span>
+        <span>·</span>
+        <span>Build Beautiful</span>
+        <span>·</span>
+        <span>Ship Constantly</span>
+        <span>·</span>
+        <span>Think Different</span>
+        <span>·</span>
+        <span>Build Beautiful</span>
+        <span>·</span>
+        <span>Ship Constantly</span>
+        <span>·</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================================
+     PATTERN 7: Split-Screen Reveal
+     For: launch / transition / before-after reveals
+     =========================================================== -->
+<section class="pattern" data-pattern="7">
+  <p class="pattern__label">Pattern 7 — Split-Screen Reveal</p>
+
+  <div class="theme-clay" style="display: grid; grid-template-columns: 1fr 1fr;
+       min-height: clamp(600px, 80vh, 900px); overflow: hidden;">
+
+    <div style="background: var(--color-secondary); color: var(--color-brand);
+       padding: var(--section-pad-y) var(--gutter);
+       display: flex; flex-direction: column; justify-content: space-between;">
+      <p class="eyebrow">Before</p>
+      <h2 class="display" style="font-size: clamp(2.5rem, 6vw, 5rem);
+         line-height: 0.95; font-weight: 300; text-transform: uppercase;
+         letter-spacing: 0.02em;">
+        The Old Way
+      </h2>
+      <p class="body-mono" style="opacity: 0.7;">
+        Slow, expensive, manual.
+      </p>
+    </div>
+
+    <div data-reveal style="background: var(--color-brand); color: var(--color-paper);
+       padding: var(--section-pad-y) var(--gutter);
+       display: flex; flex-direction: column; justify-content: space-between;
+       position: relative; overflow: hidden;">
+
+      <div aria-hidden="true" class="ghost-text" style="position: absolute;
+           right: -2vw; top: 10%; font-size: clamp(8rem, 20vw, 18rem);
+           font-weight: 300; line-height: 0.8; opacity: 0.08;
+           writing-mode: vertical-rl; transform: rotate(180deg);">
+        FUTURE
+      </div>
+
+      <p class="eyebrow">After</p>
+      <h2 class="display" style="font-size: clamp(2.5rem, 6vw, 5rem);
+         line-height: 0.95; font-weight: 300; text-transform: uppercase;
+         letter-spacing: 0.02em;">
+        The New Way
+      </h2>
+      <p class="body-mono" style="opacity: 0.8;">
+        Fast, cheap, automated.
+      </p>
+    </div>
+  </div>
+</section>
+
+<canvas data-noise="1" style="position:fixed; inset:0; pointer-events:none;
+        width:100%; height:100%; mix-blend-mode:color-dodge; z-index:101;"></canvas>
+<canvas data-noise="2" style="position:fixed; inset:0; pointer-events:none;
+        width:100%; height:100%; mix-blend-mode:difference; z-index:201;"></canvas>
+
+<script type="module">
+  import { initAllNoise }   from "../js/noise.js";
+  import { initSmoothScroll } from "../js/smooth-scroll.js";
+  import { scramble }       from "../js/scramble.js";
+  import { initParallax, initReveal } from "../js/scroll-parallax.js";
+  import { splitText }      from "../js/type-splitter.js";
+  import { initAll3D }     from "../js/three-scene.js";
+
+  initAllNoise();
+  initSmoothScroll();
+  initParallax();
+  initReveal();
+  splitText();
+  scramble("[data-scramble]", { delay: 600 });
+  initAll3D();
+</script>
+</body>
+</html>
