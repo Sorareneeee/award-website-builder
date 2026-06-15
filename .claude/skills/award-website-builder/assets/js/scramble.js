@@ -20,7 +20,7 @@
  *     scramble("#hero-text", {
  *       delay: 900,
  *       frames: "15-25",
- *       onComplete: (el) => { /* e.g. flip to OS-specific label */ },
+ *       onComplete: (el) => { // e.g. flip to OS-specific label },
  *     });
  *   </script>
  *
