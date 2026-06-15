@@ -36,7 +36,7 @@
  * ============================================================= */
 
 export const DEFAULTS = {
-  cellSize: 2,            // px; larger = coarser grain + faster
+  cellSize: 2,            // CSS px; each noise cell paints as cellSize×cellSize block
   maxDpr: 2,              // cap devicePixelRatio
   passes: [
     { color: [255, 255, 255], density: 0.15, opacity: 0.6 },   // white grain
@@ -67,30 +67,28 @@ export function startNoise(canvas, opts = {}) {
     canvas.style.height = window.innerHeight + "px";
   }
   function draw() {
-    // Size the noise grid to the canvas backing buffer, NOT innerWidth/Height.
-    // The previous version computed cols/rows from CSS pixels and putImageData
-    // at (0,0), which on any DPR>1 only filled the top-left ~50% of the
-    // canvas and left a visible rectangle of unrendered alpha there.
-    const cols = Math.ceil(canvas.width / o.cellSize);
-    const rows = Math.ceil(canvas.height / o.cellSize);
-    const img = ctx.createImageData(cols, rows);
-    const data = img.data;
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const i = (y * cols + x) * 4;
-        if (Math.random() < pass.density) {
-          data[i] = pass.color[0];
-          data[i + 1] = pass.color[1];
-          data[i + 2] = pass.color[2];
-          data[i + 3] = Math.round(
-            pass.opacity * 255 * (0.3 + Math.random() * 0.7)
-          );
-        } else {
-          data[i + 3] = 0;
-        }
+    // Clear the entire backing buffer so any cell we don't paint stays
+    // transparent (instead of leaving a faint "ghost" of the previous frame).
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Paint a grid of `cellSize` (in backing-buffer px) blocks covering the
+    // whole canvas. Each cell either takes the pass color (with random alpha)
+    // or stays transparent (density check).
+    const step = Math.max(1, Math.round(o.cellSize * Math.min(window.devicePixelRatio || 1, o.maxDpr)));
+    const w = canvas.width;
+    const h = canvas.height;
+    for (let y = 0; y < h; y += step) {
+      for (let x = 0; x < w; x += step) {
+        if (Math.random() >= pass.density) continue;
+        const a = Math.round(
+          pass.opacity * 255 * (0.3 + Math.random() * 0.7)
+        );
+        ctx.fillStyle = `rgba(${pass.color[0]},${pass.color[1]},${pass.color[2]},${a / 255})`;
+        // Slight overlap (+1) avoids hairline gaps between adjacent cells
+        // that show up on retina as faint grid lines.
+        ctx.fillRect(x, y, step + 1, step + 1);
       }
     }
-    ctx.putImageData(img, 0, 0);
     raf = requestAnimationFrame(draw);
   }
   resize();
