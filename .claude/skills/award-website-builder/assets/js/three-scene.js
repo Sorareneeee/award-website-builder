@@ -48,6 +48,11 @@ const TUNING = {
   rotationMap: Math.PI * 2,
   parallaxFactor: 0.15,
   cameraZ: 6,
+  // Radius in THREE world units. The camera frustum half-height at cameraZ=6
+  // with fov=45° is ~2.49, so a radius of 1.5 leaves comfortable margin and
+  // keeps the camera well outside the mesh (FrontSide materials render nothing
+  // from inside).
+  radius: 1.5,
 };
 
 const SHAPES = {
@@ -76,10 +81,12 @@ export function initThreeScene(el, opts = {}) {
 
   const w = el.clientWidth || 400;
   const h = el.clientHeight || 400;
-  // Use a smaller radius so the mesh sits inside the camera frustum
-  // (cameraZ=6 with fov=45° → visible half-height ≈ 2.5; radius must be < ~2.4)
-  // Scale by element size to keep proportions reasonable across viewports.
-  const radius = Math.min(w, h) * 0.18;
+  // Use a fixed world-unit radius. CSS pixels are NOT world units — multiplying
+  // a 600px container by 0.35 would give radius=210, which is far outside the
+  // 2.49-unit camera frustum half-height, putting the camera inside the mesh.
+  // With FrontSide materials (the default for MeshStandardMaterial) that means
+  // every face is back-facing and the canvas renders nothing.
+  const radius = o.radius;
 
   /* --- Three.js setup --- */
   const scene = new THREE.Scene();
@@ -298,8 +305,5 @@ if (typeof window !== "undefined") {
     initAll3D();
   }
 }
-// v2: invalidate Fastly stale cache after radius fix
-// v3: shrink mesh radius to 0.18x so it fits inside camera frustum
-//     (cameraZ=6, fov=45 → visible half-height ≈ 2.5; previous 0.35*min(w,h) = 210
-//      placed the camera INSIDE the mesh, and FrontSide materials render nothing
-//      from the inside, so the canvas appeared empty even though render was running)
+// v3: shrink radius to 0.18x — still too large (108 world units vs 2.5 frustum)
+// v4: use fixed world-unit radius = 1.5 (CSS pixels ≠ world units)
