@@ -65,13 +65,14 @@ export function startNoise(canvas, opts = {}) {
     canvas.height = window.innerHeight * dpr;
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   function draw() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const cols = Math.ceil(w / o.cellSize);
-    const rows = Math.ceil(h / o.cellSize);
+    // Size the noise grid to the canvas backing buffer, NOT innerWidth/Height.
+    // The previous version computed cols/rows from CSS pixels and putImageData
+    // at (0,0), which on any DPR>1 only filled the top-left ~50% of the
+    // canvas and left a visible rectangle of unrendered alpha there.
+    const cols = Math.ceil(canvas.width / o.cellSize);
+    const rows = Math.ceil(canvas.height / o.cellSize);
     const img = ctx.createImageData(cols, rows);
     const data = img.data;
     for (let y = 0; y < rows; y++) {
