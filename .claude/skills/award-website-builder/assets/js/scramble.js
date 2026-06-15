@@ -133,3 +133,4 @@ if (typeof window !== "undefined") {
     });
   }
 }
+// v2: invalidate Fastly stale cache after nested-comment SyntaxError fix
