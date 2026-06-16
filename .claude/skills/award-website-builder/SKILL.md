@@ -98,10 +98,28 @@ Once the 4 decisions are made, execute in order. **Do not skip phases.**
 4. String them together; delete the rest.
 
 ### Phase 4 — Copy
-1. Write the hero headline (≤ 6 words, all caps, serif display). **Keep it to 2-3 lines on desktop** — anything longer is hard to scan and will overflow the viewport on shorter screens.
+1. Write the hero headline (≤ 8 words; prefer 2–6 for impact). The display role is set to `text-wrap: balance` in `base.css`, so the browser picks line breaks based on the h1's `max-width` and the viewport. **Never use `<br>` to force a break** — see "Headline wrap policy" below.
 2. Write the eyebrow (≤ 4 words, mono, tracked).
 3. Write the body (1–2 sentences max per section).
 4. Write the CTA label (2 words: "View plans", "Download", "Shop now").
+
+#### Headline wrap policy (since 1.1.0)
+
+**Don't write `<br>` inside an h1.** The hero templates in `hero-patterns.html` use a plain string + `max-width: 14ch` + `text-wrap: balance` (from `base.css`). The browser picks the breaks itself, so a single template works for both short slogans ("Fast. Cheap. Done.") and longer value props ("The coding agent that lives in your terminal.") without re-laying out the page or overflowing the viewport.
+
+Concretely:
+
+```html
+<!-- WRONG (1.0.0 pattern, hard-coded line count) -->
+<h1>The Agent<br>That Grows<br>With You</h1>
+
+<!-- RIGHT (1.1.0 pattern, soft wraps) -->
+<h1 class="display hero-title" style="font-size:var(--text-h1);">The agent that grows with you</h1>
+```
+
+With `text-wrap: balance` and a `max-width` of 12–16ch, the browser will wrap to 2 or 3 lines depending on viewport width. On 1440px desktop it might be 2 lines, on a phone it might be 4 — both look intentional, neither overflows.
+
+If you absolutely need a forced break (e.g. for a deliberate typographic flourish like a one-word-on-its-own-line cliffhanger), use `<br>` *and* a comment explaining why. Otherwise: leave it to the browser.
 
 ### Phase 5 — Motion
 1. Decide motion intensity (Decision 4).
@@ -208,6 +226,7 @@ These are techniques that **cannot** be replaced with a simpler alternative. If 
 | 17 | Brand-color "ambient bounce" in image prompts | DICH | `image-prompts.md` |
 | 18 | Multi-stage "concept totems" (3D objects) as section dividers | DICH | `svg-arsenal.md` #11–13 |
 | 19 | 3D parallax on images (`transform: scale(1.22)` + translate) | Hermes | `effects.css` (`.parallax`) |
+| 20 | `text-wrap: balance` on h1/h2 + `max-width` in ch (lets the browser pick line breaks) | Both | `base.css` + this SKILL.md §"Headline wrap policy" |
 
 If your site uses 8+ of these, it will be in the top decile of sites shipped in 2026.
 
@@ -242,6 +261,7 @@ Copy this list, run it line-by-line, and ship only when all 48 are PASS.
 - [ ] T6. Numerals in any data table use `font-variant-numeric: tabular-nums`.
 - [ ] T7. No text is rendered as an image.
 - [ ] T8. Body text contrast ratio is ≥ 4.5:1 (WCAG AA).
+- [ ] T9. Hero h1 uses `text-wrap: balance` (or `pretty`) so line breaks adapt to copy length and viewport.
 
 ### C. Color (6 checks)
 
@@ -283,7 +303,7 @@ Copy this list, run it line-by-line, and ship only when all 48 are PASS.
 - [ ] F5. There is a "v1.0" or version label somewhere.
 - [ ] F6. There is a way to contact (email or form) in the footer.
 
-**Score = (48 − fails) / 48 × 100.** Ship if ≥ 90.
+**Score = (48 − fails) / 48 × 100.** Ship if ≥ 90. (T9 added in 1.1.0 makes the bar 49 checks.)
 
 ---
 
@@ -358,8 +378,9 @@ That's a 27KB front-end. Add 8 generated images (avg 80KB each = 640KB) = 667KB 
 8. **Tailwind for everything** — Tailwind is great for layout, terrible for editorial typography. Use this skill's `effects.css` for the editorial layer.
 9. **Copy that explains** — copy that says "we are the leading..." loses. Copy that says "Download." wins.
 10. **No "v1.0" or version** — feels unfinished. A version label is the cheapest "designed" signal.
-11. **Long hero headlines** — anything over 6 words in the display heading overflows. Keep it to 2-3 lines.
-12. **Film grain done wrong** — scattering random white pixels per frame reads as TV static, not grain. Use haze (or a pre-baked tile if you really want grain — see Appendix E).
+11. **Long hero headlines** — anything over 8 words in the display heading is hard to scan. Combine with `text-wrap: balance` + a `max-width` in `ch` so the line breaks adapt to the viewport.
+12. **Hard-coded `<br>` in headings** — `<br>` locks the line count to whatever the original copy was. If you change "Fast. Cheap. Done." to "The coding agent that lives in your terminal.", the layout will overflow or look broken. Use `text-wrap: balance` (already on `h1, h2` in `base.css`) + a `max-width` in `ch` and let the browser pick the breaks.
+13. **Film grain done wrong** — scattering random white pixels per frame reads as TV static, not grain. Use haze (or a pre-baked tile if you really want grain — see Appendix E).
 
 ---
 
@@ -373,10 +394,11 @@ That's a 27KB front-end. Add 8 generated images (avg 80KB each = 640KB) = 667KB 
 | `mix-blend-mode` | arc, parallax, video | `opacity` (less rich) |
 | `:has()` | section isolation | JS-side class swap |
 | `text-box-trim` | tight line-heights | `line-height: 0.95` instead of 0.88 |
+| `text-wrap: balance` | adaptive h1 line breaks | longer max-width + manual wraps |
 | `backdrop-filter` | glass cards, haze | solid color + opacity |
 | AVIF images | 30% smaller | WebP fallback (already used) |
 
-**All 7 modern features have been in baseline since 2023.** A 2019-era AI may need the fallback, but a 2026 browser will render the full effect.
+**All 8 modern features have been in baseline since 2023.** A 2019-era AI may need the fallback, but a 2026 browser will render the full effect.
 
 ---
 
@@ -451,6 +473,12 @@ This skill teaches **patterns**, not content. You bring your own brand, copy, an
 - Phase 4 copy guidelines now warn about long hero headlines (≤ 2-3 lines).
 - "Things that always go wrong" grew two new entries (#11 long headlines, #12 bad grain).
 - "Compatibility matrix" adds `backdrop-filter`.
+- **Hero patterns now use `text-wrap: balance` + `max-width` instead of `<br>`** — the h1 in each pattern is a plain string. The browser picks the line breaks based on viewport width, so a single template works for 3-word slogans and 9-word value props without re-laying out.
+- The `<h1>` in every hero pattern gained a `max-width: 14ch` (or `12ch` for narrow variants). Combined with the `text-wrap: balance` already on `h1, h2` in `base.css`, this gives the "magazine feel" of equal line lengths without manual `<br>`.
+- "19 Irreplaceable Techniques" grew a #20 entry for adaptive heading wraps.
+- "48-Point Self-Audit" gained T9 (headline uses `text-wrap: balance`). Bar is now 49.
+- "Things that always go wrong" grew a #12 entry for hard-coded `<br>` in headings.
+- "Compatibility matrix" adds `text-wrap: balance`.
 
 ### 1.0.0 (2026-06-14)
 - Initial release. Distilled from DICH Fashion + Hermes Desktop.
