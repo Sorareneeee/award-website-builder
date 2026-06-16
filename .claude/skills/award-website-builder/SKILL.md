@@ -1,11 +1,11 @@
 ---
 name: award-website-builder
-description: Build Awwwards-tier marketing, brand, and product sites by reusing the design tokens, code patterns, image prompts, and section templates extracted from two production-grade templates — DICH Fashion (Webflow) and Hermes Desktop (Nous Research). Use this skill whenever the user asks for a high-end brand site, marketing landing page, product launch page, fashion/tech editorial site, or any site that needs to feel "magazine-grade" or "premium." Trigger words include 杂志感, 金奖站, Awwwards, 高端品牌站, 落地页, editorial site, premium landing page, marketing site, brand site, product launch, launch page. Distilled techniques include container-query unit systems, triple-stacked canvas noise, frame overlays, animated gradient borders via mask-composite, mix-blend-mode layer stacks, scroll-driven RAF parallax, char-reveal typography, scramble text effects, and mood-based image generation.
+description: Build Awwwards-tier marketing, brand, and product sites by reusing the design tokens, code patterns, image prompts, and section templates extracted from two production-grade templates — DICH Fashion (Webflow) and Hermes Desktop (Nous Research). Use this skill whenever the user asks for a high-end brand site, marketing landing page, product launch page, fashion/tech editorial site, or any site that needs to feel "magazine-grade" or "premium." Trigger words include 杂志感, 金奖站, Awwwards, 高端品牌站, 落地页, editorial site, premium landing page, marketing site, brand site, product launch, launch page. Distilled techniques include container-query unit systems, atmospheric haze layers, frame overlays, animated gradient borders via mask-composite, mix-blend-mode layer stacks, scroll-driven RAF parallax, char-reveal typography, scramble text effects, and mood-based image generation.
 metadata:
   derived_from:
     - DICH Fashion (https://dich-fashion.webflow.io/) — Webflow + Lenis + GSAP + SplitType + Swiper + Three.js + UnicornStudio
     - Hermes Desktop (https://hermes-agent.nousresearch.com/desktop) — Tailwind v4 + container query + self-written noise/parallax/scramble
-  version: 1.0.0
+  version: 1.1.0
   license: MIT
   compatibility: "All modern browsers (2024+). Fallbacks provided for 2019-era browsers."
 ---
@@ -27,7 +27,7 @@ This skill is a complete kit. It is designed to be the **only** design reference
 - "editorial / magazine / premium / award-winning"
 - "build something that looks like Hermes / DICH / Stripe / Vercel / Apple"
 
-**Do not use** for: dashboards, e-commerce product listings, blog templates, internal tools. (For those, use a different pattern; this skill is for *single-page narrative sites*.)
+**Do not use** for: dashboards, e-commerce product listings, blog templates, internal tools. (For those, use a different pattern; this skill is for *single-page narrative sites*).
 
 ---
 
@@ -62,13 +62,15 @@ Always exactly **4**:
 3. MONO (eyebrows, micro-copy, code)
 4. SERIF (rare: pull-quotes, decorative body) — *optional but recommended*
 
-See `assets/prompts/typography-prompts.md` for the 6 free font sets.
+The default font stack in `tokens.css` uses commercial faces (Sigurd, T 012, Mondwest, NB Architekt) — those are placeholders. For real projects, swap to the **free Google Fonts** mapped in `assets/prompts/free-fonts.md`. That file gives you 4 ready-to-paste stacks that match each palette's mood.
+
+See `assets/prompts/typography-prompts.md` for the 6 commercial font sets (if you have licenses).
 
 ### Decision 4 — What's the **motion intensity**?
 
 Choose one:
 - **High** — dich level: Lenis smooth-scroll + GSAP timeline + char-reveal + parallax everywhere
-- **Medium** — Hermes level: frame overlay + noise + simple parallax + scramble hero
+- **Medium** — Hermes level: frame overlay + haze + simple parallax + scramble hero
 - **Low** — Apple level: subtle fades, no parallax, single reveal
 
 For a launch page, **medium is the sweet spot**. For a brand showcase, **high**. For a product detail page, **low**.
@@ -87,7 +89,7 @@ Once the 4 decisions are made, execute in order. **Do not skip phases.**
 ### Phase 2 — Tokens
 1. Copy `assets/css/tokens.css` into your project.
 2. Override the 5 brand colors in `:root` with your chosen palette.
-3. Override `--font-display`, `--font-sans`, `--font-mono`, `--font-serif` with your chosen font set.
+3. Override `--font-display`, `--font-sans`, `--font-mono`, `--font-serif` with your chosen font set. **Default to the free Google Fonts stacks** in `assets/prompts/free-fonts.md` unless you have licenses for the commercial ones.
 
 ### Phase 3 — Layout
 1. Open `assets/html/hero-patterns.html` and pick the hero pattern that matches Decision 1.
@@ -96,7 +98,7 @@ Once the 4 decisions are made, execute in order. **Do not skip phases.**
 4. String them together; delete the rest.
 
 ### Phase 4 — Copy
-1. Write the hero headline (≤ 6 words, all caps, serif display).
+1. Write the hero headline (≤ 6 words, all caps, serif display). **Keep it to 2-3 lines on desktop** — anything longer is hard to scan and will overflow the viewport on shorter screens.
 2. Write the eyebrow (≤ 4 words, mono, tracked).
 3. Write the body (1–2 sentences max per section).
 4. Write the CTA label (2 words: "View plans", "Download", "Shop now").
@@ -104,14 +106,12 @@ Once the 4 decisions are made, execute in order. **Do not skip phases.**
 ### Phase 5 — Motion
 1. Decide motion intensity (Decision 4).
 2. For **High**: import Lenis + GSAP + ScrollTrigger + SplitType (see Appendix A).
-3. For **Medium**: import the 5 JS modules from `assets/js/` (see §"JS Module Cheatsheet" below).
+3. For **Medium**: import the 4 working JS modules from `assets/js/` (see §"JS Module Cheatsheet" below).
 4. For **Low**: use only `initReveal` and CSS transitions.
 
-### Phase 6 — Assets
-1. Pick one of the 8 prompt templates from `image-prompts.md` §7.
-2. Generate the 8-asset minimum set with your image model.
-3. Apply the 6-step post-production pipeline (resize → color grade → grain → haze → sharpen → WebP+AVIF).
-4. Drop them into the matching slots in the layout.
+### Phase 6 — Atmosphere
+1. **Haze (recommended)**: copy the `.haze` block from `assets/css/effects.css` §15 and the four `<span class="haze__blob">` from this repo's worked examples. 4 large blurred radial gradients, drifting on CSS keyframes, parallaxing on scroll. Looks like the page is being viewed through frosted glass.
+2. *Or* pick one of the 8 prompt templates from `image-prompts.md` §7 and generate the 8-asset image set. Apply the 6-step post-production pipeline (resize → color grade → grain → haze → sharpen → WebP+AVIF).
 
 ### Phase 7 — Self-audit
 Run the 48-point self-audit at the bottom of this file. **Do not ship until all PASS.**
@@ -132,45 +132,54 @@ Run the 48-point self-audit at the bottom of this file. **Do not ship until all 
 9.  CTA cluster              → primary + secondary
 10. Closing wordmark         → big "FUTURE" or "BRAND" letterform
 11. Footer with version      → "v1.0 · 2026" and "MIT License"
-12. Noise overlay            → film grain across everything
+12. Atmospheric haze         → large blurred gradient blobs that drift
 ```
 
 If your site is missing ≥ 3 of these, it will look "amateur." Add them.
+
+**§12 update:** the original skill shipped with a triple-stacked canvas noise overlay. That has been replaced by the **haze mode** (CSS-only blurred radial gradients) because:
+- noise.js shipped as a no-op in 1.0.0 and looked like TV static when re-enabled
+- haze is GPU-composited (no per-frame JS work)
+- haze gives the same "atmospheric texture" the reference sites achieve, with a calmer result
+- `<canvas data-noise>` markup still works as a no-op (initAllNoise hides the canvases), so older projects don't break
+
+If you specifically want film grain instead of haze, see Appendix E.
 
 ---
 
 ## JS Module Cheatsheet
 
-5 modules, all drop-in:
+**4 working modules** + 1 no-op (kept for API compatibility):
 
 | Module | What it does | Lines | Use when |
 |--------|--------------|-------|----------|
-| `noise.js` | Triple-stacked canvas grain | ~80 | Always |
-| `smooth-scroll.js` | rAF parallax + footer reveal + IO video | ~190 | Always (motion ≥ medium) |
+| `noise.js` | **No-op in 1.1.0.** See Appendix E if you want grain. | ~50 | (deprecated) |
+| `smooth-scroll.js` | rAF parallax + footer reveal + IO video + **haze parallax sink** | ~210 | Always (motion ≥ medium) |
 | `scramble.js` | Terminal-style text reveal + OS detection | ~90 | Hero CTA |
 | `scroll-parallax.js` | Per-element parallax + reveal-on-scroll | ~110 | Multi-section sites |
 | `type-splitter.js` | SplitType alternative (chars/words/lines) | ~90 | Char-reveal manifesto |
 
 All modules are zero-dependency, ESM-compatible, and have a vanilla `<script>` auto-init fallback.
 
-**Minimum setup** (the 4 lines that get you 80% of the look):
+**Minimum setup** (the 3 imports that actually do work in 1.1.0):
 
 ```html
-<canvas data-noise="1" style="position:fixed; inset:0; pointer-events:none;
-        width:100%; height:100%; mix-blend-mode:color-dodge; z-index:101;"></canvas>
-<canvas data-noise="2" style="position:fixed; inset:0; pointer-events:none;
-        width:100%; height:100%; mix-blend-mode:difference; z-index:201;"></canvas>
+<div class="haze" aria-hidden="true">
+  <span class="haze__blob haze__blob--a"></span>
+  <span class="haze__blob haze__blob--b"></span>
+  <span class="haze__blob haze__blob--c"></span>
+  <span class="haze__blob haze__blob--d"></span>
+</div>
 
 <script type="module">
-  import { initAllNoise }    from "./assets/js/noise.js";
-  import { initSmoothScroll } from "./assets/js/smooth-scroll.js";
+  import { initSmoothScroll }    from "./assets/js/smooth-scroll.js";
   import { initParallax, initReveal } from "./assets/js/scroll-parallax.js";
-  import { splitText }        from "./assets/js/type-splitter.js";
-  initAllNoise(); initSmoothScroll(); initParallax(); initReveal(); splitText();
+  import { splitText }           from "./assets/js/type-splitter.js";
+  initSmoothScroll(); initParallax(); initReveal(); splitText();
 </script>
 ```
 
-That's it. 4 imports + 4 function calls = a site that looks like it took a year to build.
+That's it. 3 imports + 4 function calls + 4 blob spans = a site that looks like it took a year to build. Add `import { scramble }` if you want the hero CTA scramble.
 
 ---
 
@@ -182,7 +191,7 @@ These are techniques that **cannot** be replaced with a simpler alternative. If 
 |---|-----------|--------|---------------|
 | 1 | Container query unit system `--u = 100cqw / 2360` | Hermes | `tokens.css` line ~50 |
 | 2 | `text-box-trim: trim-both` on all headings | Hermes | `base.css` |
-| 3 | Triple-stacked canvas noise (3 blend modes) | Hermes | `noise.js` |
+| 3 | **Atmospheric haze** (4 blurred radial-gradient blobs, drifting on keyframes, parallaxing on scroll) | Both | `effects.css` §15 + `smooth-scroll.js` |
 | 4 | Frame overlay (`border: var(--frame) solid var(--bg)`) | Hermes | `effects.css` |
 | 5 | Animated gradient border via `mask-composite: exclude` | Hermes | `effects.css` (`.arc-border`) |
 | 6 | Per-image rAF-throttled scroll parallax | Hermes | `smooth-scroll.js` |
@@ -192,7 +201,7 @@ These are techniques that **cannot** be replaced with a simpler alternative. If 
 | 10 | `body:has(.theme-X) > :is(...)` for global overrides | Hermes | `tokens.css` |
 | 11 | `mix-blend-mode` stack: lighten + screen + difference + multiply | Hermes | `effects.css` |
 | 12 | `::selection` with brand accent | Hermes | `base.css` |
-| 13 | Editorial copy: ALL CAPS, tracked mono, sans-serif body | Both | `typography-prompts.md` |
+| 13 | Editorial copy: ALL CAPS, tracked mono, sans-serif body | Both | `typography-prompts.md` + `free-fonts.md` |
 | 14 | Generous section padding (4.44em → 12.8em on mobile) | DICH | `tokens.css` |
 | 15 | Lenis + GSAP ScrollTrigger for the "magazine feel" | DICH | (optional; see Appendix A) |
 | 16 | Char-reveal via SplitType + GSAP stagger | DICH | `type-splitter.js` |
@@ -249,7 +258,7 @@ Copy this list, run it line-by-line, and ship only when all 48 are PASS.
 - [ ] M2. Scroll-linked motion uses `requestAnimationFrame`, not `setInterval`.
 - [ ] M3. There is at least one parallax element.
 - [ ] M4. There is at least one reveal-on-scroll.
-- [ ] M5. There is at least one animated decoration (e.g. the arc stroke).
+- [ ] M5. There is at least one animated decoration (e.g. the arc stroke, or a drifting haze blob).
 - [ ] M6. Hover state is set on all clickable elements.
 - [ ] M7. `prefers-reduced-motion` is respected.
 - [ ] M8. No element animates more than 60 times per second.
@@ -286,9 +295,11 @@ Copy this list, run it line-by-line, and ship only when all 48 are PASS.
 narrative_arc:   B (Exploration)
 palette:         DICH Pastel
 fonts:           DICH set (T 012 + Space Grotesk + JetBrains Mono + NB Architekt)
+                — or — the free equivalent: Fraunces + Inter + JetBrains Mono + Spectral
 motion:          High (Lenis + GSAP)
 hero:            hero-patterns.html #2 (Pastel Magazine)
 sections:        [1, 2, 3, 5, 6] from section-patterns.html
+atmosphere:      haze (4 blobs, warm pastel)
 images:          8-asset Mood A set, AVIF+WebP
 ```
 
@@ -298,9 +309,11 @@ images:          8-asset Mood A set, AVIF+WebP
 narrative_arc:   A (Introduction)
 palette:         Hermes Blue
 fonts:           Hermes set (DM Serif Display + Inter + JetBrains Mono)
-motion:          Medium (5 JS modules)
+                — or — the free equivalent: Fraunces + Inter + JetBrains Mono + Spectral
+motion:          Medium (4 working JS modules)
 hero:            hero-patterns.html #1 (Editorial Display)
 sections:        [1, 2, 3, 4, 6]
+atmosphere:      haze (4 blobs, blue + cyan)
 images:          8-asset Mood B set
 ```
 
@@ -313,6 +326,7 @@ fonts:           Awwwards default (Fraunces + Inter + JetBrains Mono)
 motion:          Low (reveal only)
 hero:            hero-patterns.html #4 (3D Cosmic) — re-themed
 sections:        [3, 4, 5, 6]
+atmosphere:      haze (4 blobs, mint + hot pink)
 images:          8-asset Mood D set
 ```
 
@@ -323,12 +337,12 @@ images:          8-asset Mood D set
 ```
 tokens.css            (3KB)   design tokens
 base.css              (7KB)   reset + baseline
-effects.css           (11KB)  frame, noise CSS, arc, parallax
+effects.css           (13KB)  frame, haze, arc, parallax
 index.html            (use one of the 6 hero patterns)
 <one JS module>       (~3KB each)
 ```
 
-That's a 25KB front-end. Add 8 generated images (avg 80KB each = 640KB) = 665KB total. Less than a single YouTube thumbnail. Yet it will render like a 6-month project.
+That's a 27KB front-end. Add 8 generated images (avg 80KB each = 640KB) = 667KB total. Less than a single YouTube thumbnail. Yet it will render like a 6-month project.
 
 ---
 
@@ -344,6 +358,8 @@ That's a 25KB front-end. Add 8 generated images (avg 80KB each = 640KB) = 665KB 
 8. **Tailwind for everything** — Tailwind is great for layout, terrible for editorial typography. Use this skill's `effects.css` for the editorial layer.
 9. **Copy that explains** — copy that says "we are the leading..." loses. Copy that says "Download." wins.
 10. **No "v1.0" or version** — feels unfinished. A version label is the cheapest "designed" signal.
+11. **Long hero headlines** — anything over 6 words in the display heading overflows. Keep it to 2-3 lines.
+12. **Film grain done wrong** — scattering random white pixels per frame reads as TV static, not grain. Use haze (or a pre-baked tile if you really want grain — see Appendix E).
 
 ---
 
@@ -357,15 +373,16 @@ That's a 25KB front-end. Add 8 generated images (avg 80KB each = 640KB) = 665KB 
 | `mix-blend-mode` | arc, parallax, video | `opacity` (less rich) |
 | `:has()` | section isolation | JS-side class swap |
 | `text-box-trim` | tight line-heights | `line-height: 0.95` instead of 0.88 |
+| `backdrop-filter` | glass cards, haze | solid color + opacity |
 | AVIF images | 30% smaller | WebP fallback (already used) |
 
-**All 6 modern features have been in baseline since 2023.** A 2019-era AI may need the fallback, but a 2026 browser will render the full effect.
+**All 7 modern features have been in baseline since 2023.** A 2019-era AI may need the fallback, but a 2026 browser will render the full effect.
 
 ---
 
 ## The 1-line summary
 
-> A premium site is **bold colors + large display serif + char-reveal + triple-stack noise + frame overlay + scroll-driven parallax + 8 color-graded images + 4 well-chosen fonts**. Nothing more. This skill gives you all 8 in copy-paste form.
+> A premium site is **bold colors + large display serif + char-reveal + atmospheric haze + frame overlay + scroll-driven parallax + 8 color-graded images + 4 well-chosen fonts**. Nothing more. This skill gives you all 8 in copy-paste form.
 
 ---
 
@@ -425,6 +442,16 @@ This skill teaches **patterns**, not content. You bring your own brand, copy, an
 
 ## Appendix C — Changelog
 
+### 1.1.0 (2026-06-16)
+- **Atmospheric haze** replaces the deprecated canvas-noise effect. 4 CSS-only blurred radial-gradient blobs that drift on keyframes and parallax on scroll. GPU-composited, no per-frame JS.
+- `noise.js` is now a documented no-op (kept for API compat). See Appendix E if you want grain.
+- `smooth-scroll.js` gains a haze parallax sink — translates the `.haze` layer at 0.32 × scrollY on every rAF tick.
+- New `assets/prompts/free-fonts.md` with 4 ready-to-paste Google Fonts stacks that replace the commercial placeholders in `tokens.css`.
+- Decision 3 now defaults to free Google Fonts; commercial font sets moved to "if you have licenses".
+- Phase 4 copy guidelines now warn about long hero headlines (≤ 2-3 lines).
+- "Things that always go wrong" grew two new entries (#11 long headlines, #12 bad grain).
+- "Compatibility matrix" adds `backdrop-filter`.
+
 ### 1.0.0 (2026-06-14)
 - Initial release. Distilled from DICH Fashion + Hermes Desktop.
 - 3 CSS files (tokens, base, effects) — 21KB total.
@@ -432,3 +459,96 @@ This skill teaches **patterns**, not content. You bring your own brand, copy, an
 - 6 hero patterns + 6 section patterns.
 - 9 color palettes, 6 font sets, 32 SVG elements.
 - 48-point self-audit.
+
+---
+
+## Appendix D — Free Google Fonts mapping
+
+The `tokens.css` defaults list commercial faces (Sigurd, T 012, Mondwest, NB Architekt) — those are *references* to what the original sites used, not free alternatives. For a real project, override the four `--font-*` variables with one of these free Google Fonts stacks:
+
+| Stack | Display | Sans | Mono | Serif | Mood | Pairs with palette |
+|-------|---------|------|------|-------|------|---------------------|
+| **Awwwards default** | Fraunces | Inter | JetBrains Mono | Spectral | Warm, editorial | Ink, Mint, DICH Pastel, Cinema |
+| **Tech / Hermes** | DM Serif Display | Inter | JetBrains Mono | Spectral | Cold, precise | Hermes Blue, Aurora, Glacier |
+| **Magazine** | Playfair Display | Manrope | IBM Plex Mono | Lora | Classic, balanced | DICH Pastel, Sunset, Clay |
+| **Brutalist mono** | Space Grotesk | Space Grotesk | JetBrains Mono | — | Geometric, all-caps | Ink, Cinema, Mint |
+
+**Minimal override** (the only 4 lines you need to change in `tokens.css`):
+
+```css
+:root {
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-sans:    "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+  --font-serif:   "Spectral", "Times New Roman", serif;
+}
+```
+
+And add this to your `<head>`:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Spectral:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+```
+
+For the **Tech / Hermes** stack, swap `Fraunces` → `DM Serif Display`. For the **Magazine** stack, swap `Fraunces` → `Playfair Display`, `Inter` → `Manrope`, `JetBrains Mono` → `IBM Plex Mono`, `Spectral` → `Lora`.
+
+---
+
+## Appendix E — If you really want film grain
+
+The original canvas-noise approach (3 stacked `<canvas>` with different blend modes) works *if* you do it the right way. The mistake is scattering random white pixels per frame — that reads as TV static. The right approach is a **pre-baked noise tile** that drifts slowly.
+
+```js
+// assets/js/noise.js — restore this if you want film grain instead of haze
+const TILE = 256;
+
+function bakeTile(density, r, g, b, dpr) {
+  const off = document.createElement("canvas");
+  off.width  = TILE * dpr;
+  off.height = TILE * dpr;
+  const c = off.getContext("2d");
+  c.fillStyle = `rgba(${r},${g},${b},1)`;
+  const total = TILE * TILE * dpr * dpr;
+  for (let i = 0; i < total * density; i++) {
+    const x = (Math.random() * TILE * dpr) | 0;
+    const y = (Math.random() * TILE * dpr) | 0;
+    c.fillRect(x, y, dpr, dpr);
+  }
+  return off;
+}
+
+export function startNoise(canvas, opts = {}) {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const { density = 0.6, alpha = 0.05 } = opts;
+  const tile = bakeTile(density, 255, 255, 255, dpr);
+  let ox = 0, oy = 0, raf = 0;
+  const ctx = canvas.getContext("2d");
+  const tick = () => {
+    if (Math.random() < 0.06) ox = (ox + 1) % TILE;
+    if (Math.random() < 0.06) oy = (oy + 1) % TILE;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = alpha;
+    for (let y = -oy; y < canvas.height; y += TILE) {
+      for (let x = -ox; x < canvas.width; x += TILE) {
+        ctx.drawImage(tile, x, y);
+      }
+    }
+    ctx.globalAlpha = 1;
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      raf = requestAnimationFrame(tick);
+    }
+  };
+  tick();
+  return () => cancelAnimationFrame(raf);
+}
+```
+
+Differences from the broken 1.0.0 version:
+- Tile is **baked once** instead of re-scattering per frame
+- Offset advances by 1px only ~6% of frames (slow drift, not strobing)
+- `cellSize = 1` (smooth) instead of 2 (chunky)
+- `globalAlpha = 0.05` per draw (low single-frame intensity) instead of per-pixel `rgba(...,32)` (high per-pixel intensity)
+
+The net effect: a paper-like tooth that doesn't strobe. Combine with a frame overlay for the full "editorial print" look.
