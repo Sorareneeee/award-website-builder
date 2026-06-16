@@ -12,8 +12,11 @@
  *                            scroll position
  *   4. Footer reveal       — fades the fixed footer in/out as the
  *                            bottom of the page approaches
- *   5. Anchor smooth scroll — rewrites anchor clicks to smoothScroll
- *   6. Video play/pause    — IntersectionObserver toggles playback
+ *   5. Haze parallax sink  — translates the .haze layer at
+ *                            0.32 × scrollY, creating a "depth"
+ *                            effect against the foreground
+ *   6. Anchor smooth scroll — rewrites anchor clicks to smoothScroll
+ *   7. Video play/pause    — IntersectionObserver toggles playback
  *
  * Why it matters
  *   The original is ~100 lines of plain ES5. We rewrote it as ESM
@@ -23,7 +26,7 @@
  * Usage
  *   <script type="module" src="assets/js/smooth-scroll.js"></script>
  *
- *   Markup contract (data-id is required):
+ *   Markup contract (all optional, missing IDs are skipped):
  *     <div id="scroll-root">           <!-- root container -->
  *     <div id="parallax-panel">        <!-- optional -->
  *       <img id="parallax-badge">      <!-- optional -->
@@ -31,9 +34,8 @@
  *     </div>
  *     <img class="parallax"> ... </img>  <!-- 0..N parallax images -->
  *     <footer id="footer">             <!-- optional, gets fade -->
+ *     <div class="haze"> ... </div>    <!-- optional, gets parallax sink -->
  *     <video id="autoplay-video">      <!-- optional, gets IO play -->
- *
- *   All of the above are optional. Missing IDs are skipped silently.
  * ============================================================= */
 
 const SELECTORS = {
@@ -43,6 +45,7 @@ const SELECTORS = {
   footer:  "#footer",
   parallax: ".parallax",
   video:   "#autoplay-video",
+  haze:    ".haze",            // atmospheric blur layer (parallax sink)
 };
 
 const TUNING = {
@@ -52,6 +55,7 @@ const TUNING = {
   imageMaxOffset: 0.10,   // × image height
   footerRevealVh: 0.38,   // over how many vh the footer fades in
   footerStartVh:  0.72,   // at what point the fade starts
+  hazeParallax:   0.32,   // fraction of scrollY to translate haze layer
 };
 
 export function initSmoothScroll(opts = {}) {
@@ -63,11 +67,12 @@ export function initSmoothScroll(opts = {}) {
   const stop    = document.querySelector(S.stop);
   const footer  = document.querySelector(S.footer);
   const video   = document.querySelector(S.video);
+  const haze    = document.querySelector(S.haze);
   const parallaxImgs = document.querySelectorAll(S.parallax);
 
   let py = 0, stopTop = 0, badgeOffset = 0;
   let imgs = [];
-  let lastPy = "", lastBadge = "", footerOpacity = -1;
+  let lastPy = "", lastBadge = "", lastHaze = "", footerOpacity = -1;
 
   function init() {
     if (panel) py = panel.getBoundingClientRect().top + scrollY;
@@ -88,6 +93,8 @@ export function initSmoothScroll(opts = {}) {
         h: p.offsetHeight,
       };
     });
+    // Reset damping state so the first update() always writes.
+    lastPy = ""; lastBadge = ""; lastHaze = ""; footerOpacity = -1;
   }
 
   function update() {
@@ -138,6 +145,20 @@ export function initSmoothScroll(opts = {}) {
         footer.style.setProperty("--hw-footer-pe", f > 0.98 ? "auto" : "none");
       }
     }
+
+    // (5) Haze parallax sink — translate the atmospheric blur
+    //     layer downward as the user scrolls. The layer lags
+    //     behind the foreground by `hazeParallax` × scrollY,
+    //     which gives a "depth" feel: content moves at full
+    //     speed, haze moves at ~1/3 speed. The haze CSS picks
+    //     this up via `transform: translate3d(0, var(--py-haze), 0)`.
+    if (haze) {
+      const hazeY = (s * T.hazeParallax).toFixed(1) + "px";
+      if (hazeY !== lastHaze) {
+        haze.style.setProperty("--py-haze", hazeY);
+        lastHaze = hazeY;
+      }
+    }
   }
 
   // rAF throttling — never more than one update per frame
@@ -157,7 +178,7 @@ export function initSmoothScroll(opts = {}) {
     document.fonts.ready.then(() => { init(); update(); });
   }
 
-  // (5) Anchor smooth scroll
+  // (6) Anchor smooth scroll
   document.addEventListener("click", (e) => {
     const a = e.target.closest('a[href^="#"]');
     if (!a) return;
@@ -170,7 +191,7 @@ export function initSmoothScroll(opts = {}) {
     window.scrollTo({ top, behavior: "smooth" });
   });
 
-  // (6) Video IO play/pause
+  // (7) Video IO play/pause
   if (video) {
     const io = new IntersectionObserver(
       (entries) => {
