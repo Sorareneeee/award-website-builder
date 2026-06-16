@@ -8,11 +8,11 @@
  *
  *   <div class="hw-frame">                  → border overlay
  *   <div class="hw-vignette">               → radial darken
- *   <div class="hw-noise">                  → noise texture
  *   <div class="hw-arc">                    → animated gradient border
  *   <div class="hw-ghost">                  → ultra-faint ghost text
  *   <div class="dich-shape-x">              → big X decoration
  *   <div class="dich-cloud">                → soft cloud blob
+ *   <div class="haze">                      → atmospheric blur layer
  *
  * All effects are pointer-events:none by default (decorative).
  * ============================================================ */
@@ -30,7 +30,7 @@
   z-index: 100;
   border: var(--frame) solid var(--bg);
   pointer-events: none;
-  /* Above the noise, below modals. */
+  /* Above the haze (z-index 5), below modals. */
 }
 
 /* ============================================================
@@ -55,14 +55,13 @@
 }
 
 /* ============================================================
- * 3.  NOISE OVERLAY — film-grain texture
+ * 3.  NOISE OVERLAY — DEPRECATED in 1.1.0
  * ------------------------------------------------------------
- * Two ways to apply noise:
- *   (a) HTML <canvas> via the noise.js module (recommended)
- *   (b) Tiled PNG fallback (no JS, lower quality)
- *
- * The CSS below is for (b). Override --noise-url to point to
- * your tiled noise PNG (Hermes uses /img/desktop/noise.png).
+ * The triple-stacked canvas noise was replaced by the
+ * atmospheric haze in §15. The CSS below is kept so older
+ * projects that include `[data-noise]` canvases still hide
+ * them (noise.js hides them too as a belt-and-braces).
+ * If you really want film grain, see SKILL.md Appendix E.
  * ============================================================ */
 
 .noise-tiled {
@@ -79,12 +78,6 @@
   background: var(--noise-url, none) 0 0 / var(--noise-size) var(--noise-size);
 }
 
-/* Three preset "noises" for canvas overlays.
-   Use the data attributes to set per-canvas parameters.
-   Hermes stacks three canvases:
-     noise-1: white, density 0.15, color-dodge
-     noise-2: white, density 0.08, difference
-     noise-3: gray,  density 0.25, normal opacity 0.02  */
 [data-noise] {
   position: fixed;
   inset: 0;
@@ -146,8 +139,8 @@
           mask-composite: exclude;
   -webkit-mask-clip: content-box, border-box;
           mask-clip: content-box, border-box;
-  -webkit-mask-origin: content-box, border-box;
           mask-origin: content-box, border-box;
+  -webkit-mask-origin: content-box, border-box;
 }
 
 /* Show the arc on hover of an ancestor with .group */
@@ -397,4 +390,117 @@
   text-transform: uppercase;
   letter-spacing: var(--ls-mono);
   line-height: 1.4;
+}
+
+/* ============================================================
+ * 15.  ATMOSPHERIC HAZE — the new "atmosphere" effect (1.1.0)
+ * ------------------------------------------------------------
+ * Four large blurred radial-gradient circles, drifting on CSS
+ * keyframes, parallaxing on scroll. Reads as "the page is being
+ * viewed through frosted glass with light leaking from the
+ * corners". GPU-composited, no per-frame JS, no canvas.
+ *
+ *   - 4 blobs default. Add more `.haze__blob` elements to add
+ *     more; the keyframes drift them in different directions.
+ *   - On light sections, switch to multiply + lower opacity to
+ *     produce "soft shadows" instead of "bright halos" (use a
+ *     `.theme-paper` wrapper around those sections).
+ *   - The scroll-driven translate is driven by smooth-scroll.js
+ *     via the --py-haze CSS variable.
+ *
+ * Markup contract:
+ *   <div class="haze" aria-hidden="true">
+ *     <span class="haze__blob haze__blob--a"></span>
+ *     <span class="haze__blob haze__blob--b"></span>
+ *     <span class="haze__blob haze__blob--c"></span>
+ *     <span class="haze__blob haze__blob--d"></span>
+ *   </div>
+ * ============================================================ */
+
+.haze {
+  --py-haze: 0px;            /* set by smooth-scroll.js, drives parallax */
+  position: fixed;
+  inset: 0;
+  z-index: 5;                /* above content, below frame (100) */
+  pointer-events: none;
+  overflow: hidden;
+  mix-blend-mode: screen;    /* lightens — the blobs are "fog", not "smoke" */
+  transform: translate3d(0, var(--py-haze), 0);
+  will-change: transform;
+}
+
+.haze__blob {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+  opacity: 0.55;
+}
+
+/* Position + size + drift per blob. The keyframes are
+ * 14-22s loops so the motion is calm and obvious. Each blob
+ * drifts along a different axis so the layer "breathes". */
+.haze__blob--a {
+  top: -12%; left: -8%;
+  width: 55vmin; height: 55vmin;
+  background: radial-gradient(circle at 50% 50%,
+    color-mix(in srgb, var(--color-accent) 70%, transparent) 0%,
+    transparent 70%);
+  animation: drift-a 18s ease-in-out infinite alternate;
+}
+.haze__blob--b {
+  top: 35%; right: -15%;
+  width: 60vmin; height: 60vmin;
+  background: radial-gradient(circle at 50% 50%,
+    color-mix(in srgb, #f4a261 55%, transparent) 0%,
+    transparent 70%);
+  animation: drift-b 22s ease-in-out infinite alternate;
+}
+.haze__blob--c {
+  bottom: -18%; left: 20%;
+  width: 50vmin; height: 50vmin;
+  background: radial-gradient(circle at 50% 50%,
+    color-mix(in srgb, var(--color-accent) 50%, transparent) 0%,
+    transparent 70%);
+  animation: drift-c 14s ease-in-out infinite alternate;
+}
+.haze__blob--d {
+  top: 60%; left: 45%;
+  width: 35vmin; height: 35vmin;
+  background: radial-gradient(circle at 50% 50%,
+    color-mix(in srgb, #ffe4b3 40%, transparent) 0%,
+    transparent 70%);
+  animation: drift-d 20s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  from { transform: translate3d(0,    0,   0) scale(1);    }
+  50%  { transform: translate3d(6vw,  4vh, 0) scale(1.12); }
+  to   { transform: translate3d(10vw, 8vh, 0) scale(1.18); }
+}
+@keyframes drift-b {
+  from { transform: translate3d(0,     0,   0) scale(1.05); }
+  50%  { transform: translate3d(-5vw,  6vh, 0) scale(0.95); }
+  to   { transform: translate3d(-9vw,  10vh,0) scale(0.88); }
+}
+@keyframes drift-c {
+  from { transform: translate3d(0,    0,   0) scale(1);    }
+  50%  { transform: translate3d(7vw, -5vh, 0) scale(1.1);  }
+  to   { transform: translate3d(11vw,-7vh, 0) scale(1.15); }
+}
+@keyframes drift-d {
+  from { transform: translate3d(0,     0,   0) scale(0.95); }
+  50%  { transform: translate3d(-4vw, -7vh, 0) scale(1.05); }
+  to   { transform: translate3d(-7vw, -10vh,0) scale(1.15); }
+}
+
+/* On light/paper sections the screen blend would wash them out.
+ * Switch to multiply so the blobs read as soft shadows. */
+.theme-paper .haze { mix-blend-mode: multiply; }
+.theme-paper .haze__blob { opacity: 0.18; }
+
+/* Respect motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .haze__blob { animation: none; }
 }
